@@ -17,11 +17,11 @@ export interface Product {
   totalRevenue:number,
 }
 
-export type Category = {
-    id: number;
-    name: string;
-    icon: React.ElementType;
-};
+// export type Category = {
+//     id: number;
+//     name: string;
+//     icon: React.ElementType;
+// };
 
 export interface SignUpFormInputs {
   firstName: string;
@@ -97,4 +97,54 @@ export interface OrderType{
     orderId : string ;
     paymentMethod : string;
     totalAmount : string;
+}
+
+
+export interface Category {
+  id: number;
+  name: string;
+  slug: string;
+  icon_url: string;
+  description: string;
+  display_order: number;
+  is_active: boolean;
+}
+
+export interface Section {
+  id: number;
+  name: string;
+  slug: string;
+  description: string;
+  display_order: number;
+  is_active: boolean;
+}
+
+export interface Product {
+  id: number;
+  name: string;
+  image_url: string;
+  current_price: string;
+  original_price: string;
+  discount_percent: number;
+  is_active: boolean;
+  categories: Category[];
+  sections: Section[];
+  created_date: string;
+  modified_date: string;
+}
+
+export interface ProductSection {
+  name: string;
+  slug: string;
+  products: Product[];
+}
+
+export interface StorefrontResponse {
+  categories: Category[];
+
+  new_arrivals: ProductSection;
+
+  bestsellers: ProductSection;
+
+  featured: ProductSection;
 }
