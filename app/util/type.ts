@@ -1,6 +1,6 @@
 export type ProductType = "New Arrivals" | "Bestsellers" | "Featured";
 
-export interface Product {
+export interface OldProduct {
   id: number;
   description: string;
   name: string;

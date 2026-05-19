@@ -57,17 +57,17 @@ const FeaturedProducts = ({
                             </h2>
 
                             <p className="text-gray-600 mt-5 text-lg leading-relaxed max-w-md">
-                                {mainProduct.description}
+                                {mainProduct.name}
                             </p>
 
                             <div className="mt-6 flex items-center gap-4 flex-wrap">
                                 <p className="text-3xl font-bold">
-                                    ${mainProduct.price.toFixed(2)}
+                                    ${mainProduct.original_price}
                                 </p>
 
-                                {mainProduct.discount! > 0 && (
+                                {Number(mainProduct.current_price)! > 0 && (
                                     <span className="bg-red-500 text-white text-sm px-3 py-1 rounded-full">
-                                        {mainProduct.discount}% OFF
+                                        {mainProduct.discount_percent}% OFF
                                     </span>
                                 )}
                             </div>
@@ -76,7 +76,7 @@ const FeaturedProducts = ({
 
                         <div className="relative w-full md:w-[40%] h-55 lg:h-75">
                             <Image
-                                src={mainProduct.image}
+                                src={mainProduct.image_url}
                                 alt={mainProduct.name}
                                 fill
                                 className=" object-contain transition-transform duration-700 group-hover:scale-105"
@@ -102,13 +102,13 @@ const FeaturedProducts = ({
                                 </h3>
 
                                 <p className="text-gray-600 mt-5 text-lg line-clamp-3">
-                                    {sideProducts[0].description}
+                                    {sideProducts[0].name}
                                 </p>
                             </div>
 
                             <div className="relative w-full h-50 mt-6">
                                 <Image
-                                    src={sideProducts[0].image}
+                                    src={sideProducts[0].image_url}
                                     alt={sideProducts[0].name}
                                     fill
                                     className=" object-contain transition-transform  duration-700 group-hover:scale-105 "
@@ -143,18 +143,18 @@ const FeaturedProducts = ({
                                     </h3>
 
                                     <p className="text-lg text-gray-600 mt-3 line-clamp-2">
-                                        {product.description}
+                                        {product.name}
                                     </p>
 
                                     {/* PRICE */}
                                     <div className="mt-4">
                                         <p className="text-2xl font-bold">
-                                            ${product.price.toFixed(2)}
+                                            ${product.original_price}
                                         </p>
 
-                                        {product.discount! > 0 && (
+                                        {Number(product.current_price)! > 0 && (
                                             <span className="inline-block mt-2 bg-red-500 text-white text-xs px-2 py-1 rounded-full">
-                                                {product.discount}% OFF
+                                                {product.discount_percent}% OFF
                                             </span>
                                         )}
                                     </div>
@@ -163,7 +163,7 @@ const FeaturedProducts = ({
                                 {/* IMAGE */}
                                 <div className=" relative w-35  sm:w-42  lg:w-55 h-35 sm:h-42  lg:h-55 shrink-0 -mt-4 -mr-4 ">
                                     <Image
-                                        src={product.image}
+                                        src={product.image_url}
                                         alt={product.name}
                                         fill
                                         className=" object-contain transition-transform  duration-700  group-hover:scale-110  " />

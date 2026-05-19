@@ -15,6 +15,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 const Page = () => {
+
     const [storeData, setStoreData] = useState<StorefrontResponse | null>(null);
     const [loading, setLoading] = useState(true);
     const [selectedType, setSelectedType] = useState("new_arrivals");
@@ -90,9 +91,8 @@ const Page = () => {
     );
 }
 
-    const featured_Products = products
-        .filter((p) => p.type === "Featured")
-        .slice(0, 4);
+    const featuredProducts =
+    storeData?.featured?.products?.slice(0, 4) || [];
 
     const heroProduct = products.find(p => p.id === homeConfig.heroId);
     const homeProducts = homeConfig.featuredIds
@@ -260,7 +260,7 @@ const Page = () => {
                     </div>
                 </div>
             </section>
-            <section className=""> <FeaturedProducts products={featured_Products} /> </section>
+            <section className=""> <FeaturedProducts products={featuredProducts} /> </section>
             <section className="bg-gray-100 px-4 md:px-10 lg:px-20 py-16">
                 <div className="p-6">
                     <h1 className=" p-5 text-2xl font-bold ">Discounts up to -50%</h1>

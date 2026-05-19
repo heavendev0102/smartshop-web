@@ -21,42 +21,42 @@ function ProductDetail() {
   const { addToCart, openCart, cartItems } = useCartStore();
   const [showError, setShowError] = useState(false);
   
-  if (!product) return notFound();
-  const relatedProducts = products.filter((p) => p.company === product.company && p.id !== product.id).slice(0, 4);
-  const handleAddToCart = (product: Product, qty: number) => {
-    addToCart(product, qty);
-    openCart();
-  }
+  // if (!product) return notFound();
+  // const relatedProducts = products.filter((p) => p.company === product.company && p.id !== product.id).slice(0, 4);
+  // const handleAddToCart = (product: Product, qty: number) => {
+  //   addToCart(product, qty);
+  //   openCart();
+  // }
 
-  const isAdded = cartItems.some(item => item.id === product.id);
-  const isOutOfStock = (product?.stock ?? 0) === 0;
+  // const isAdded = cartItems.some(item => item.id === product.id);
+  // const isOutOfStock = (product?.stock ?? 0) === 0;
 
-const handleBuyNow = (product: Product, qty: number) => {
+// const handleBuyNow = (product: Product, qty: number) => {
    
-    const currentUser = localStorage.getItem("currentUser");
-            if (!currentUser) {
-               router.push("/login");
-               return;
-            }
-    if ((product?.stock ?? 0) === 0) {
-      setShowError(true);
-      return;
-    }
-    const existingItem = cartItems.find(
-      (item) => item.id === product?.id
-    );
+//     const currentUser = localStorage.getItem("currentUser");
+//             if (!currentUser) {
+//                router.push("/login");
+//                return;
+//             }
+//     if ((product?.stock ?? 0) === 0) {
+//       setShowError(true);
+//       return;
+//     }
+//     const existingItem = cartItems.find(
+//       (item) => item.id === product?.id
+//     );
 
-    if (!existingItem && product) {
-      addToCart(product, qty);
-    }
-    router.push("/CheckOut");
-  };
+//     if (!existingItem && product) {
+//       addToCart(product, qty);
+//     }
+//     router.push("/CheckOut");
+//   };
 
   return (
     <>
     <Suspense fallback={<div>Loading...</div>}>
       <Breadcrumb category={product?.category} company={product?.company} product={product?.name} />
-      <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-2 mt-15">
+      {/* <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-2 mt-15">
         <div className="flex gap-4">
           <div className="w-full h-112.5 flex items-center justify-center bg-gray-50 rounded-xl">
             <Image
@@ -138,14 +138,14 @@ const handleBuyNow = (product: Product, qty: number) => {
             <div>💰 30 Days Return Policy</div>
           </div>
         </div>
-      </div>
-      <div className="pb-5 border-t-2 mt-10">
+      </div> */}
+      {/* <div className="pb-5 border-t-2 mt-10">
         <p className='font-medium text-center text-[36px] mt-10 ml-20'>Related Products</p>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-y-3 gap-x-3 mt-10 ml-13">
           {relatedProducts?.map((product: Product) => (
             <ProductCard key={product.id} product={product} />
           ))}</div>
-      </div>
+      </div> */}
       </Suspense>
     </>
   );

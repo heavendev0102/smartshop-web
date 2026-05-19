@@ -6,7 +6,7 @@ const ProductPage = () => {
     return (
         <>
             <section>
-                <ProductList products={products} />
+                {/* <ProductList products={products} /> */}
             </section>
         </>
     )

@@ -9,13 +9,13 @@ export interface FilterProps {
 
 export default function FilterSidebar({ allProducts, setProducts, category }: FilterProps) {
   const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
-  const brandsForCategory = [
-  ...new Set(
-    allProducts
-      .filter(p => p.category === category)
-      .map(p => p.company)
-  )
-];
+//   const brandsForCategory = [
+//   ...new Set(
+//     allProducts
+//       .filter(p => p.category === category)
+//       .map(p => p.company)
+//   )
+// ];
   const handleBrandChange = (brand: string) => {
     const updated = selectedBrands.includes(brand)
       ? selectedBrands.filter((b) => b !== brand)
@@ -23,12 +23,12 @@ export default function FilterSidebar({ allProducts, setProducts, category }: Fi
 
     setSelectedBrands(updated);
 
-    const filtered =
-      updated.length === 0
-        ? allProducts
-        : allProducts.filter((p) => updated.includes(p.company!));
+    // const filtered =
+    //   updated.length === 0
+    //     ? allProducts
+    //     : allProducts.filter((p) => updated.includes(p.company!));
 
-    setProducts(filtered);
+    // setProducts(filtered);
   };
 
   return (
@@ -36,7 +36,7 @@ export default function FilterSidebar({ allProducts, setProducts, category }: Fi
       <h3 className="font-semibold mb-2">Brand</h3>
 
       <div className="space-y-2 text-sm max-h-80 overflow-y-auto">
-        {brandsForCategory.map((brand) => (
+        {/* {brandsForCategory.map((brand) => (
           <label key={brand} className="flex items-center gap-2">
             <input
               type="checkbox"
@@ -44,7 +44,7 @@ export default function FilterSidebar({ allProducts, setProducts, category }: Fi
             />
             {brand}
           </label>
-        ))}
+        ))} */}
       </div>
 
     </div>

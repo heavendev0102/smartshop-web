@@ -1,5 +1,5 @@
 "use client";
-import { Product as productType } from "@/app/util/type";
+import { OldProduct as productType } from "@/app/util/type";
 import { useState } from "react";
 import FilterSidebar from "./FilterSidebar";
 import ProductList from "./ProductList";
@@ -12,16 +12,16 @@ export default function CatalogLayout({ initialProducts , category }: { initialP
 
       {/* Sidebar */}
       <div className="lg:col-span-1">
-        <FilterSidebar
+        {/* <FilterSidebar
           allProducts={initialProducts}
           setProducts={setProducts}
           category={category}
-        />
+        /> */}
       </div>
 
       {/* Products */}
       <div className="lg:col-span-3">
-        <ProductList products={products} />
+        {/* <ProductList products={products} /> */}
       </div>
 
     </div>

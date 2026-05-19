@@ -1,17 +1,17 @@
-import { Category, Product } from "./type";
+import { Category, OldProduct } from "./type";
 import { Smartphone, Watch, Camera, Headphones, Monitor, Gamepad2 } from "lucide-react";
-export const categories: Category[] = [
-  { id: 1, name: "Phones", icon: Smartphone },
-  { id: 2, name: "SmartWatches", icon: Watch },
-  { id: 3, name: "Cameras", icon: Camera },
-  { id: 4, name: "Headphones", icon: Headphones },
-  { id: 5, name: "Computers", icon: Monitor },
-  { id: 6, name: "Gaming", icon: Gamepad2 },
+// export const categories: Category[] = [
+//   { id: 1, name: "Phones", icon: Smartphone },
+//   { id: 2, name: "SmartWatches", icon: Watch },
+//   { id: 3, name: "Cameras", icon: Camera },
+//   { id: 4, name: "Headphones", icon: Headphones },
+//   { id: 5, name: "Computers", icon: Monitor },
+//   { id: 6, name: "Gaming", icon: Gamepad2 },
  
-];
+// ];
 
 
-export const products: Product[] = [
+export const products: OldProduct[] = [
   {
     id: 1,
     name: "iPhone 14 Pro Max",
