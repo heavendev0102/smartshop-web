@@ -221,7 +221,7 @@ export default function Payment({ onBack }: { onBack: () => void }) {
         clearSelectedAddressId();
         clearShippingMethod();
         // Redirect
-        router.push("/user/PaymentSuccessPage");
+        router.push("/PaymentSuccessPage");
     };
     const handlePaymentMethodChange = (method: string) => {
         setPaymentType(method);

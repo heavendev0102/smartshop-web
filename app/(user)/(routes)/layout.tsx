@@ -1,6 +1,5 @@
 "use client";
-import Navbar from "../_components/Navbar";
-import Footer from "../_components/Footer";
+
 import Cart from "../_components/Cart";
 import { useState } from "react";
 import { usePathname } from "next/navigation";
@@ -10,16 +9,16 @@ export default function RootLayout({ children, }: Readonly<{ children: React.Rea
     const pathname = usePathname();
 
     const showMiniCart =
-        pathname.startsWith("/user/ProductDetail") ||
-        pathname.startsWith("/user/Catalog");
+        pathname.startsWith("/ProductDetail") ||
+        pathname.startsWith("/Catalog");
     return (
 
         <>
-            <Navbar/>
+            
             <Cart isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
             {children}
             {showMiniCart && <MiniCart />}
-            <Footer />
+            
         </>
 
 

@@ -18,7 +18,7 @@ const FeaturedProducts = ({
             id: id,
         }).toString();
 
-        router.push(`/user/ProductDetail?${productID}`);
+        router.push(`/ProductDetail?${productID}`);
     }
 
     return (

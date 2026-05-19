@@ -20,11 +20,14 @@ export default function Page() {
     const router = useRouter();
     async function onSubmit(data: SignInFormInputs) {
         try {
-            await api.post("/api/v1/users/login", data);
+            const response = await api.post("/api/v1/users/login", data);
+            localStorage.setItem("access_token", response.data.access_token);
+            localStorage.setItem("user", JSON.stringify(response.data.user));
             toast.success("Login successful!");
             reset();
-            router.push("/user/Home");
-
+            const redirectPath = localStorage.getItem("redirect_after_login") || "/";
+            localStorage.removeItem("redirect_after_login");
+            router.push(redirectPath);
         } catch (error) {
             const axiosError = error as AxiosError<ErrorResponse>;
             if (axiosError.response?.status === 401) {

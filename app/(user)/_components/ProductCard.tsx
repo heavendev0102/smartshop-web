@@ -15,7 +15,7 @@ const ProductCard = ({ product }: { product: Product }) => {
     };
     function productDetails(id: string) {
         const productID = new URLSearchParams({ id: id }).toString();
-        router.push(`/user/ProductDetail?${productID}`);
+        router.push(`/ProductDetail?${productID}`);
     }
     return (
 

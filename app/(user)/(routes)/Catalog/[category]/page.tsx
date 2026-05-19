@@ -1,6 +1,6 @@
 import { getProducts } from "@/app/lib/productService"
-import Breadcrumb from "@/app/user/_components/Breadcrumb";
-import CatalogLayout from "@/app/user/_components/CatalogLayout";
+import Breadcrumb from "@/app/(user)/_components/Breadcrumb";
+import CatalogLayout from "@/app/(user)/_components/CatalogLayout";
 
 
 const Page = async ({ params, searchParams }: { params: Promise<{ category: string }>, searchParams: { brand?: string } }) => {

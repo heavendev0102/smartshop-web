@@ -14,11 +14,10 @@ const Cart = ({ isOpen, onClose }: CartProps) => {
         return sum + currentItem.price * currentItem.quantity;
     }, 0);
     function goToCart() {
-        router.push("/user/Cart");
+        router.push("/Cart");
     }
     function goToCheckOut() {
-        
-        router.push("/user/CheckOut");
+        router.push("/CheckOut");
     }
     return (
         <>

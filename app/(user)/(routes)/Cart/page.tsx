@@ -14,32 +14,21 @@ const Page = () => {
         return sum + currentItem.price * currentItem.quantity;
     }, 0);
 
-    const handleBuyNow = () => {
-        const currentUser = localStorage.getItem("currentUser");
-            if (!currentUser) {
-               router.push("/login");
-               return;
-            }
-        if (cartItems.length === 0) {
-            setShowError(true);
-            return;
-        }
-            router.push("/user/CheckOut");
-    };
+   const handleBuyNow = () => {
+    const token = localStorage.getItem("access_token");
+    if (cartItems.length === 0) {
+        setShowError(true);
+        return;
+    }
+    if (!token) {
+        localStorage.setItem("redirect_after_login", "/CheckOut");
+        router.push("/login");
+        return; 
+    }
+    router.push("/CheckOut");
+};
     return (
         <>
-            <div className="relative w-full h-64 sm:h-72 md:h-80">
-                <Image
-                    src={heroImage2}
-                    alt="heroImage"
-                    className="absolute inset-0 w-full h-full object-cover"
-                />
-                <div className="relative z-10 flex items-center justify-center h-full">
-                    <h1 className="text-3xl sm:text-4xl md:text-5xl text-white font-extrabold font-serif">
-                        Cart
-                    </h1>
-                </div>
-            </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-10 mt-12 mb-5">
                 <div className="lg:col-span-2">

@@ -3,7 +3,7 @@ import { Suspense } from "react";
 import { products } from "@/app/util/data";
 import { useSearchParams } from 'next/navigation';
 import { notFound } from "next/navigation";
-import Breadcrumb from "@/app/user/_components/Breadcrumb";
+import Breadcrumb from "./Breadcrumb";
 import Image from "next/image";
 import ProductCard from "./ProductCard";
 import { Product } from "@/app/util/type";
@@ -49,7 +49,7 @@ const handleBuyNow = (product: Product, qty: number) => {
     if (!existingItem && product) {
       addToCart(product, qty);
     }
-    router.push("/user/CheckOut");
+    router.push("/CheckOut");
   };
 
   return (

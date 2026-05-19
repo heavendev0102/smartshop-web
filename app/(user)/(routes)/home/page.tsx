@@ -6,13 +6,13 @@ import Apro from "../../../../public/Home/Apro.png";
 import phone_of_section2 from "../../../../public/Home/phone_of_section2.png";
 import headphone from "../../../../public/Home/headphone.png";
 import { ProductType } from "@/app/util/type";
-import { useState } from "react";
 import { categories, products, homeConfig } from "@/app/util/data";
 import ProductCard from "../../_components/ProductCard";
 import productBanner from "../../../../public/Home/banner.png";
 import FeaturedProducts from "../../_components/FeatureProductCard";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import {  useState } from "react";
 
 const Page = () => {
   const router = useRouter();
@@ -27,40 +27,40 @@ const Page = () => {
     .map(id => products.find(p => p.id === id))
     .filter(Boolean);
 
+
   const ps5 = homeProducts[0];
   const airpods = homeProducts[1];
   const vision = homeProducts[2];
   const macbook = homeProducts[3];
 
-
   return (
     <>
-   <section className="bg-linear-to-r from-[#211C24] to-black text-white min-h-[55vh] md:min-h-[65vh] lg:min-h-[75vh] flex items-center overflow-hidden">
+      <section className="bg-linear-to-r from-[#211C24] to-black text-white min-h-[55vh] md:min-h-[65vh] lg:min-h-[75vh] flex items-center overflow-hidden">
 
-  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12 items-center">
-      <div className="text-center md:text-left">
-        <p className="  text-sm  sm:text-base  lg:text-lg  text-gray-400  font-semibold  tracking-wide  pt-3"> Pro.Beyond. </p>
-        <h1  className=" mt-3  text-4xl  sm:text-5xl  md:text-6xl  lg:text-[72px]  font-light  leading-tight" >
-          <span className="font-thin text-gray-300"> iPhone 14 </span>{" "}
-          <span className="font-semibold text-white"> Pro</span>
-        </h1>
-        <p className=" text-gray-400   mt-5  max-w-md  mx-auto md:mx-0  text-sm  sm:text-base  lg:text-lg  leading-relaxed ">
-          {heroProduct?.description}
-        </p>
-        <button  className="  mt-8  border  border-white/30  px-8  py-3  rounded-xl  hover:bg-white  hover:text-black  transition-all  duration-300 " onClick={() => router.push( `/user/ProductDetail?id=${heroProduct?.id}`) }> View Details </button>
-      </div>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12 items-center">
+            <div className="text-center md:text-left">
+              <p className="  text-sm  sm:text-base  lg:text-lg  text-gray-400  font-semibold  tracking-wide  pt-3"> Pro.Beyond. </p>
+              <h1 className=" mt-3  text-4xl  sm:text-5xl  md:text-6xl  lg:text-[72px]  font-light  leading-tight" >
+                <span className="font-thin text-gray-300"> iPhone 14 </span>{" "}
+                <span className="font-semibold text-white"> Pro</span>
+              </h1>
+              <p className=" text-gray-400   mt-5  max-w-md  mx-auto md:mx-0  text-sm  sm:text-base  lg:text-lg  leading-relaxed ">
+                {heroProduct?.description}
+              </p>
+              <button className="  mt-8  border  border-white/30  px-8  py-3  rounded-xl  hover:bg-white  hover:text-black  transition-all  duration-300 " onClick={() => router.push(`/ProductDetail?id=${heroProduct?.id}`)}> View Details </button>
+            </div>
 
-      <div className="relative flex justify-center md:justify-end">
-        <Image src={heroProduct?.image || phoneImage}  alt={heroProduct?.name || "Hero Product"} width={300}  height={400}  priority  className="  w-55 sm:w-72   md:w-88   lg:w-107.5  xl:w-120  h-auto  object-contain  transition-transform  duration-700  hover:scale-105" 
-        />
-      </div>
-    </div>
-  </div>
-</section>
+            <div className="relative flex justify-center md:justify-end">
+              <Image src={heroProduct?.image || phoneImage} alt={heroProduct?.name || "Hero Product"} width={300} height={400} priority className="  w-55 sm:w-72   md:w-88   lg:w-107.5  xl:w-120  h-auto  object-contain  transition-transform  duration-700  hover:scale-105"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
       <section className="grid grid-cols-1 lg:grid-cols-2 ">
         <div className="flex flex-col">
-          <div className="flex flex-col sm:flex-row items-center bg-white p-6 gap-6" onClick={() => router.push(`/user/ProductDetail?id=${ps5?.id}`)}>
+          <div className="flex flex-col sm:flex-row items-center bg-white p-6 gap-6" onClick={() => router.push(`/ProductDetail?id=${ps5?.id}`)}>
             <Image src={ps5?.image || SSD} alt="" width={160} height={160} className="w-40 sm:w-56 object-contain  transition-transform
             duration-700 hover:scale-105" />
             <div>
@@ -71,7 +71,7 @@ const Page = () => {
             </div>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2">
-            <div className="flex items-center bg-gray-200 p-6 gap-4" onClick={() => router.push(`/user/ProductDetail?id=${airpods?.id}`)}>
+            <div className="flex items-center bg-gray-200 p-6 gap-4" onClick={() => router.push(`/ProductDetail?id=${airpods?.id}`)}>
               <Image src={airpods?.image || headphone} alt="" width={112} height={112} className="w-28 object-contain  transition-transform
             duration-700 hover:scale-105" />
               <div>
@@ -81,7 +81,7 @@ const Page = () => {
                 </p>
               </div>
             </div>
-            <div className="flex items-center bg-[#353535] text-white p-6 gap-4" onClick={() => router.push(`/user/ProductDetail?id=${vision?.id}`)}>
+            <div className="flex items-center bg-[#353535] text-white p-6 gap-4" onClick={() => router.push(`/ProductDetail?id=${vision?.id}`)}>
               <Image src={vision?.image || Apro} alt="" width={112} height={112} className="w-28 object-contain  transition-transform
             duration-700 hover:scale-105" />
               <div>
@@ -96,7 +96,7 @@ const Page = () => {
 
           </div>
         </div>
-        <div className="flex  justify-center bg-gray-100 p-6 md:p-10 gap-6" onClick={() => router.push(`/user/ProductDetail?id=${macbook?.id}`)}>
+        <div className="flex  justify-center bg-gray-100 p-6 md:p-10 gap-6" onClick={() => router.push(`/ProductDetail?id=${macbook?.id}`)}>
 
           <div className="pt-45">
             <p className="text-3xl sm:text-5xl">
@@ -121,12 +121,12 @@ const Page = () => {
           </h2>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 ">
           {categories.map((category) => {
             const Icon = category.icon;
 
             return (
-              <Link key={category.id} href={`/user/Catalog/${category.name}`}
+              <Link key={category.id} href={`/Catalog/${category.name}`}
                 className=" group bg-white rounded-2xl flex flex-col items-center justify-center py-8 cursor-pointer border border-gray-100 hover:bg-black hover:text-white  hover:shadow-xl  transition-all  duration-300" >
                 <Icon size={28} className="className= text-gray-700 mb-3 transition-colors duration-300 group-hover:text-white " />
                 <p className="text-lg font-bold text-gray-700 text-center group-hover:text-white">
@@ -138,17 +138,24 @@ const Page = () => {
         </div>
       </section>
       <section className="bg-white px-4 md:px-10 lg:px-20 py-16">
-        <div className="p-6">
-          <div className="flex gap-6 mb-6 text-lg font-bold text-gray-800">
+        <div className="p-6 hover:cursor-pointer">
+          <div className="flex gap-6 mb-6 text-lg font-bold text-gray-800 ">
             {["New Arrivals", "Bestsellers", "Featured"].map((type) => {
               const isActive = selectedType === type;
               return (
-                <button
+                <p
                   key={type}
-                  onClick={() => setSelectedType(type as ProductType)}
-                  className={`px-4 py-2 border-b-2 transition ${isActive
-                    ? "border-black text-black"
-                    : "border-transparent "}`}>{type}</button>);
+                  onClick={() => setSelectedType(type as ProductType)}  
+                  className={`px-4 py-2 border-b-2 transition 
+  ${isActive
+                      ? "border-black text-black font-semibold "
+                      : "border-transparent text-gray-500 hover:text-black hover:border-gray-400 "
+                    }
+`}
+                >
+                  {type}
+                </p>
+              );
             })}
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
@@ -176,7 +183,7 @@ const Page = () => {
           </div>
         </div>
       </section>
-      <Image  src={productBanner} alt="banner" className="w-full h-auto mt-5 object-cover"/>
+      <Image src={productBanner} alt="banner" className="w-full h-auto mt-5 object-cover" />
     </>
   )
 }

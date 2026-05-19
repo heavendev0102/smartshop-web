@@ -61,7 +61,7 @@ export default function MiniCart() {
             <button
               onClick={() => {
                 closeCart();
-                router.push("/user/Cart");
+                router.push("/Cart");
               }}
               className="w-full mt-3 bg-black text-white py-2 rounded-lg hover:bg-gray-800"
             >
