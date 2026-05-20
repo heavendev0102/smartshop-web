@@ -1,7 +1,7 @@
-import { products } from "@/app/util/data";
-import api from "../util/apiClient";
+// import { products } from "@/app/util/data";
+// import api from "../util/apiClient";
 
-export const getProducts = (category?: string) => {
+export const getProducts = () => {
   // console.log("Fetching products for category:", category);
   // if (!category) return products;
   // const response = await api.get(

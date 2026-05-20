@@ -1,7 +1,7 @@
 "use client"
 import { getStorefront } from "@/app/services/getStorefront";
 import Image from "next/image";
-import phoneImage from "../public/Home/image.png";
+// import phoneImage from "../public/Home/image.png";
 import SSD from "../public/Home/ssd.png";
 import Apro from "../public/Home/Apro.png";
 import phone_of_section2 from "../public/Home/phone_of_section2.png";
@@ -95,7 +95,7 @@ const Page = () => {
     const featuredProducts =
     storeData?.featured?.products?.slice(0, 4) || [];
 
-    const heroProduct = products.find(p => p.id === homeConfig.heroId);
+    // const heroProduct = products.find(p => p.id === homeConfig.heroId);
     const homeProducts = homeConfig.featuredIds
         .map(id => products.find(p => p.id === id))
         .filter(Boolean);
