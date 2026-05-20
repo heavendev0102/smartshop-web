@@ -3,9 +3,9 @@ import { z } from "zod";
 
 export const signUpValidationSchema = z.object({
   firstName: z
-     .string()
-     .min(1, "First name is required")
-     .min(3, "First name must be at least 3 characters"),
+    .string()
+    .min(1, "First name is required")
+    .min(3, "First name must be at least 3 characters"),
 
   lastName: z
     .string()
@@ -69,3 +69,32 @@ export const contactSchema = z.object({
   message: z.string().min(1, "message is required"),
 
 });
+
+
+export const productSchema = z.object({
+  name: z.string().min(1, "Product name is required"),
+
+  image_url: z.string().url("Enter a valid image URL"),
+
+  current_price: z
+    .number()
+    .min(0, "Must be >= 0"),
+
+  original_price: z
+    .number()
+    .min(2, "Must be >= 0"),
+
+  discount_percent: z
+    .union([z.number()])
+    .optional(),
+
+  category_slugs: z
+    .array(z.string())
+    .min(1, "Select at least one category"),
+
+  section_slugs: z
+    .array(z.string())
+    .min(1, "Select at least one category"),
+});
+
+export type ProductFormValues = z.infer<typeof productSchema>;

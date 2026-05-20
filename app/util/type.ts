@@ -148,3 +148,35 @@ export interface StorefrontResponse {
 
   featured: ProductSection;
 }
+
+export type CategorySlug = {
+  id: number;
+  name: string;
+  slug: string;
+};
+
+export type SectionSlug = {
+  name: string;
+  slug: string;
+};
+
+export type StorefrontData = {
+  categories: CategorySlug[];
+  new_arrivals?: SectionSlug;
+  bestsellers?: SectionSlug;
+  featured?: SectionSlug;
+};
+
+export type ProductFormData = {
+  name: string;
+  image_url: string;
+  current_price: number;
+  original_price: number;
+  discount_percent: number ;
+  category_slugs: string[];
+  section_slugs: string[];
+};
+export type ApiError = {
+  message?: string;
+  detail?: string;
+};

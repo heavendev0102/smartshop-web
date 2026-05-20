@@ -1,7 +1,7 @@
 import ProductList from "./ProductList"
-import { getProducts } from "@/app/lib/productService"
+// import { getProducts } from "@/app/lib/productService"
 const ProductPage = () => {
-    const products = getProducts();
+    // const products = getProducts();
 
     return (
         <>

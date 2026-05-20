@@ -1,5 +1,9 @@
-import { Category, OldProduct } from "./type";
-import { Smartphone, Watch, Camera, Headphones, Monitor, Gamepad2 } from "lucide-react";
+import {  OldProduct } from "./type";
+// import phoneImage from "../../public/Home/image.png";
+import phoneImage1 from "../../public/Home/ProductList/i14.png";
+import phoneImage2 from "../../public/Home/ProductList/Samsung_Galaxy.png";
+import phoneImage3 from "../../public/Home/ProductList/ipad_pro.png";
+// import { Smartphone, Watch, Camera, Headphones, Monitor, Gamepad2 } from "lucide-react";
 // export const categories: Category[] = [
 //   { id: 1, name: "Phones", icon: Smartphone },
 //   { id: 2, name: "SmartWatches", icon: Watch },
@@ -7,10 +11,35 @@ import { Smartphone, Watch, Camera, Headphones, Monitor, Gamepad2 } from "lucide
 //   { id: 4, name: "Headphones", icon: Headphones },
 //   { id: 5, name: "Computers", icon: Monitor },
 //   { id: 6, name: "Gaming", icon: Gamepad2 },
- 
 // ];
 
-
+// Add this above your return()
+export const heroSlides = [
+  {
+    title: "iPhone 14 Pro",
+    subtitle: "Pro.Beyond.",
+    description:
+      "Experience the power of the A16 Bionic chip, advanced camera system, and stunning Super Retina XDR display.",
+    image:  phoneImage1,
+    productId:1,
+  },
+  {
+    title: "Samsung Galaxy S24 Ultra",
+    subtitle: "Epic Innovation.",
+    description:
+      "Capture every detail with AI-powered photography and enjoy a smooth, premium performance.",
+    image: phoneImage2,
+    productId: 2,
+  },
+  {
+    title: "Google Pixel 9 Pro",
+    subtitle: "Pure Android.",
+    description:
+      "Powered by Google AI with an incredible camera and the cleanest Android experience.",
+    image: phoneImage3,
+    productId: 3,
+  },
+];
 export const products: OldProduct[] = [
   {
     id: 1,

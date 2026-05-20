@@ -3,7 +3,7 @@ import "./globals.css";
 import { Josefin_Sans } from "next/font/google";
 import { Toaster } from "sonner";
 import AppShell from "@/components/AppShell";
-
+import Provider from "./Provider";
 const josefin = Josefin_Sans({
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700"],
@@ -43,7 +43,7 @@ export default function RootLayout({
 
       <body className="min-h-full flex flex-col font-sans">
         
-        <AppShell>{children}</AppShell>
+        <AppShell><Provider>{children}</Provider></AppShell>
        
         <Toaster position="top-right" richColors />
         
@@ -51,17 +51,3 @@ export default function RootLayout({
     </html>
   );
 }
-//guest checkout   -- done
-//rate
-//address issues update and store in local storage   --done
-//profile
-//wishlist
-//search
-//summer sale
-//filtering
-//sorting
-//pagination
-
-//>improve routes of guest users 
-//>store delivery address in local storage and use it during checkout and also add update and delete functionality for it
-//>improve UI of Home page

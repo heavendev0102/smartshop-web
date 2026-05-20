@@ -13,7 +13,8 @@ import productBanner from "../public/Home/banner.png";
 import FeaturedProducts from "./(user)/_components/FeatureProductCard";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-
+import { heroSlides } from "@/app/util/data";
+import HeroCarousel from "./(user)/_components/HeroCarousel";
 const Page = () => {
 
     const [storeData, setStoreData] = useState<StorefrontResponse | null>(null);
@@ -104,29 +105,7 @@ const Page = () => {
     const macbook = homeProducts[3];
     return (
         <>
-            <section className="bg-linear-to-r from-[#211C24] to-black text-white min-h-[55vh] md:min-h-[65vh] lg:min-h-[75vh] flex items-center overflow-hidden">
-
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12 items-center">
-                        <div className="text-center md:text-left">
-                            <p className="  text-sm  sm:text-base  lg:text-lg  text-gray-400  font-semibold  tracking-wide  pt-3"> Pro.Beyond. </p>
-                            <h1 className=" mt-3  text-4xl  sm:text-5xl  md:text-6xl  lg:text-[72px]  font-light  leading-tight" >
-                                <span className="font-thin text-gray-300"> iPhone 14 </span>{" "}
-                                <span className="font-semibold text-white"> Pro</span>
-                            </h1>
-                            <p className=" text-gray-400   mt-5  max-w-md  mx-auto md:mx-0  text-sm  sm:text-base  lg:text-lg  leading-relaxed ">
-                                {heroProduct?.description}
-                            </p>
-                            <button className="  mt-8  border  border-white/30  px-8  py-3  rounded-xl  hover:bg-white  hover:text-black  transition-all  duration-300 " onClick={() => router.push(`/ProductDetail?id=${heroProduct?.id}`)}> View Details </button>
-                        </div>
-
-                        <div className="relative flex justify-center md:justify-end">
-                            <Image src={heroProduct?.image || phoneImage} alt={heroProduct?.name || "Hero Product"} width={300} height={400} priority className="  w-55 sm:w-72   md:w-88   lg:w-107.5  xl:w-120  h-auto  object-contain  transition-transform  duration-700  hover:scale-105"
-                            />
-                        </div>
-                    </div>
-                </div>
-            </section>
+            <HeroCarousel slides={heroSlides} />
             <section className="grid grid-cols-1 lg:grid-cols-2 ">
                 <div className="flex flex-col">
                     <div className="flex flex-col sm:flex-row items-center bg-white p-6 gap-6" onClick={() => router.push(`/ProductDetail?id=${ps5?.id}`)}>
@@ -193,6 +172,7 @@ const Page = () => {
                     {storeData?.categories?.map((category) => (
                         <div
                             key={category.id}
+                            onClick={() => router.push(`/Catalog/${category.slug}`)}
                             className="bg-white rounded-2xl p-5 flex flex-col items-center justify-center shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-pointer border border-gray-100"
                         >
                             <div className="relative w-16 h-16 mb-4">

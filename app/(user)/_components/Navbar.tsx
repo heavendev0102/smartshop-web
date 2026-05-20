@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import {Heart, ShoppingCart, Search, User, Menu, X,} from "lucide-react";
+import { Heart, ShoppingCart, Search, User, Menu, X } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import useCartStore from "@/app/store/cartStore";
@@ -17,11 +17,20 @@ const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
-    setTimeout(()=>{
+    setTimeout(() => {
       setMounted(true);
-    },0)
+    }, 0)
+  }, []);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setMounted(true);
+      const token = localStorage.getItem("access_token");
+      setIsLoggedIn(!!token);
+    }, 0);
   }, []);
 
   useEffect(() => {
@@ -44,12 +53,13 @@ const Navbar = () => {
     localStorage.removeItem("access_token");
     localStorage.removeItem("user");
     localStorage.removeItem("redirect_after_login");
+    setIsLoggedIn(false);
     setShowDropdown(false);
     setMobileMenuOpen(false);
     router.push("/login");
   }
 
- 
+
   function handleCartClick() {
     const isProductPage =
       pathname.startsWith("/ProductDetail") ||
@@ -78,7 +88,6 @@ const Navbar = () => {
     );
   }
 
- 
   function renderNavLinks(mobile = false) {
     return (
       <ul
@@ -88,20 +97,16 @@ const Navbar = () => {
             : "hidden md:flex items-center gap-6 font-medium"
         }
       >
-       
         <li>
           <Link
             href="/"
             onClick={() => mobile && setMobileMenuOpen(false)}
-            className={
-              pathname === "/" ? "text-black" : "text-gray-400"
-            }
+            className={pathname === "/" ? "text-black" : "text-gray-400"}
           >
             Home
           </Link>
         </li>
 
-    
         {NAV_LINKS.map((item) => {
           const href = `/${item}`;
 
@@ -110,13 +115,30 @@ const Navbar = () => {
               <Link
                 href={href}
                 onClick={() => mobile && setMobileMenuOpen(false)}
-                className={
-                  pathname === href
-                    ? "text-black"
-                    : "text-gray-400"
-                }
+                className={`flex items-center gap-2 ${pathname === href ? "text-black" : "text-gray-400"
+                  }`}
               >
                 {item}
+
+               
+                {item === "Blog" && !isLoggedIn && (
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+
+                      if (mobile) {
+                        setMobileMenuOpen(false);
+                      }
+
+                      router.push("/login");
+                    }}
+                    className="ml-2 px-3 py-1 text-sm font-medium bg-black text-white rounded-md hover:bg-gray-800 transition-colors"
+                  >
+                    Sign in
+                  </button>
+                )}
               </Link>
             </li>
           );
@@ -125,7 +147,6 @@ const Navbar = () => {
     );
   }
 
- 
   function renderUserDropdown() {
     return (
       <div className="relative" ref={dropdownRef}>
@@ -150,14 +171,11 @@ const Navbar = () => {
     );
   }
 
-
   function renderActionIcons() {
     return (
       <div className="flex items-center gap-4 pt-2">
-      
         <Heart className="text-gray-700 cursor-pointer" />
 
-        
         <div
           className="relative cursor-pointer"
           onClick={handleCartClick}
@@ -170,7 +188,7 @@ const Navbar = () => {
             </div>
           )}
         </div>
-        {renderUserDropdown()}
+        {isLoggedIn && renderUserDropdown()}
       </div>
     );
   }
@@ -178,7 +196,7 @@ const Navbar = () => {
   return (
     <nav className="bg-neutral-primary w-full border-b border-default">
       <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
-  
+
         <Link
           href="/"
           className="text-xl md:text-2xl font-bold text-heading"
@@ -199,8 +217,8 @@ const Navbar = () => {
         </button>
 
         {renderNavLinks()}
-    
-     <div className="hidden md:flex">
+
+        <div className="hidden md:flex">
           {renderActionIcons()}
         </div>
       </div>
