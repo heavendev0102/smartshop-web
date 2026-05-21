@@ -30,7 +30,16 @@ const Page = () => {
   });
   
   if (isLoading) {
-    return <h1>Loading...</h1>;
+    return <div className="flex items-center justify-center min-h-screen bg-white">
+            <div className="flex flex-col items-center gap-4">
+                
+                <div className="w-14 h-14 border-4 border-gray-300 border-t-black rounded-full animate-spin"></div>
+
+                <p className="text-lg font-medium text-gray-700">
+                    Loading product...
+                </p>
+            </div>
+        </div>
   }
 
   if (error) {
