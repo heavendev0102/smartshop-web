@@ -14,10 +14,11 @@ export default function Breadcrumb({ category, company, product }: Props) {
         Home
       </Link>
 
-      <span>&gt;</span>
+      
       {category && (
         <>
           <Link href={`/Catalog/${category}`} className="hover:text-black">
+          <span>&gt;</span>
             <span className=" capitalize">{category}</span></Link>
         </>
       )}

@@ -18,11 +18,7 @@ const ProductCard = ({ product }: { product: Product }) => {
   };
 
   function productDetails(id: string) {
-    const productID = new URLSearchParams({
-      id: id,
-    }).toString();
-
-    router.push(`/ProductDetail?${productID}`);
+    router.push(`/ProductDetail/${id}`);
   }
 
   const imageSrc =

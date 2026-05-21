@@ -14,11 +14,7 @@ const FeaturedProducts = ({
     const sideProducts = products.slice(1);
 
     function productDetails(id: string) {
-        const productID = new URLSearchParams({
-            id: id,
-        }).toString();
-
-        router.push(`/ProductDetail?${productID}`);
+        router.push(`/ProductDetail/${id}`);
     }
 
     return (
