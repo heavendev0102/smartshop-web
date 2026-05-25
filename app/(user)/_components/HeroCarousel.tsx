@@ -76,14 +76,14 @@ export default function HeroCarousel({ slides, }: HeroCarouselProps) {
                           <>
                             {/* Current Price */}
                             <span className="text-4xl font-bold">
-                              ₹{slide.current_price}
+                              ${slide.current_price}
                             </span>
 
                             {/* Original Price */}
                             <span
                               className={`line-through text-lg ${theme.subText}`}
                             >
-                              ₹{slide.original_price}
+                              ${slide.original_price}
                             </span>
 
                             {/* Discount Badge */}
@@ -94,7 +94,7 @@ export default function HeroCarousel({ slides, }: HeroCarouselProps) {
                         ) : (
                           /* NO DISCOUNT */
                           <span className="text-4xl font-bold">
-                            ₹{slide.original_price}
+                            ${slide.original_price}
                           </span>
                         )}
                       </div>
