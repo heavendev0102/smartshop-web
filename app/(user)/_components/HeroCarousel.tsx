@@ -2,6 +2,7 @@
 import * as React from "react";
 import Image from "next/image";
 import Autoplay from "embla-carousel-autoplay";
+import { Product } from "@/app/util/type";
 import { useRouter } from "next/navigation";
 import {
   Carousel,
@@ -22,7 +23,7 @@ type Slide = {
 };
 
 type HeroCarouselProps = {
-  slides: Slide[];
+  slides: Product[];
 };
 
 export default function HeroCarousel({ slides }: HeroCarouselProps) {
@@ -55,22 +56,22 @@ export default function HeroCarousel({ slides }: HeroCarouselProps) {
                   {/* Left Content */}
                   <div className="text-center md:text-left">
                     <p className="text-sm sm:text-base lg:text-lg text-gray-400 font-semibold tracking-wide pt-3">
-                      {slide.subtitle}
+                      Pro.Beyond.
                     </p>
 
                     <h1 className="mt-3 text-4xl sm:text-5xl md:text-6xl lg:text-[72px] font-light leading-tight">
-                      {slide.title}
+                      {slide.name}
                     </h1>
 
                     <p className="text-gray-400 mt-5 max-w-md mx-auto md:mx-0 text-sm sm:text-base lg:text-lg leading-relaxed">
-                      {slide.description}
+                      Experience the power of the A16 Bionic chip, advanced camera system, and stunning Super Retina XDR display.
                     </p>
 
                     <button
                       className="mt-8 border border-white/30 px-8 py-3 rounded-xl hover:bg-white hover:text-black transition-all duration-300"
                       onClick={() => {
-                        if (slide.productId) {
-                          router.push(`/ProductDetail?id=${slide.productId}`);
+                        if (slide.id) {
+                          router.push(`/ProductDetail/${slide.id}`);
                         }
                       }}
                     >
@@ -81,8 +82,8 @@ export default function HeroCarousel({ slides }: HeroCarouselProps) {
                   {/* Right Image */}
                   <div className="relative flex justify-center md:justify-end">
                     <Image
-                      src={slide.image}
-                      alt={slide.title}
+                      src={slide.image_url}
+                      alt={slide.name}
                       width={300}
                       height={400}
                       priority

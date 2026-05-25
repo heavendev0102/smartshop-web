@@ -92,7 +92,7 @@ const blogs = [
   return (
     <div className="bg-white min-h-screen">
       {/* HERO */}
-      <section className="bg-linear-to-r from-black to-zinc-900 text-white overflow-hidden">
+      <section className="bg-linear-to-r from-[#211C24] to-zinc-900 text-white overflow-hidden">
         <div className="max-w-480 mx-auto px-4 sm:px-6 lg:px-10 py-16 lg:py-24">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
             <div>

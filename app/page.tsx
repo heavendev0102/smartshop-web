@@ -13,7 +13,7 @@ import productBanner from "../public/Home/banner.png";
 import FeaturedProducts from "./(user)/_components/FeatureProductCard";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { heroSlides } from "@/app/util/data";
+// import { heroSlides } from "@/app/util/data";
 import HeroCarousel from "./(user)/_components/HeroCarousel";
 const Page = () => {
 
@@ -78,89 +78,159 @@ const Page = () => {
         }, 0)
     }, []);
     if (loading) {
-    return (
-        <div className="flex items-center justify-center min-h-screen bg-white">
-            <div className="flex flex-col items-center gap-4">
-                
-                <div className="w-14 h-14 border-4 border-gray-300 border-t-black rounded-full animate-spin"></div>
-
-                <p className="text-lg font-medium text-gray-700">
-                    Loading store...
-                </p>
+        return (
+            <div className="flex items-center justify-center min-h-screen bg-white">
+                <div className="flex flex-col items-center gap-4">
+                    <div className="w-14 h-14 border-4 border-gray-300 border-t-black rounded-full animate-spin"></div>
+                    <p className="text-lg font-medium text-gray-700">
+                        Loading store...
+                    </p>
+                </div>
             </div>
-        </div>
-    );
-}
-
+        );
+    }
+    const heroSlides = uniqueProducts.filter((p) =>
+        p.categories.some((c) => c.slug === "phones")
+    ).slice(0, 3);
     const featuredProducts =
-    storeData?.featured?.products?.slice(0, 4) || [];
-
+        storeData?.featured?.products?.slice(0, 4) || [];
     // const heroProduct = products.find(p => p.id === homeConfig.heroId);
-    const homeProducts = homeConfig.featuredIds
-        .map(id => products.find(p => p.id === id))
-        .filter(Boolean);
-    const ps5 = homeProducts[0];
-    const airpods = homeProducts[1];
-    const vision = homeProducts[2];
-    const macbook = homeProducts[3];
+    // const homeProducts = homeConfig.featuredIds
+    //     .map(id => products.find(p => p.id === id))
+    //     .filter(Boolean);
+    // const ps5 = homeProducts[0];
+    // const airpods = homeProducts[1];
+    // const vision = homeProducts[2];
+    // const macbook = homeProducts[3];
+
+    const ps5 = filteredProducts.find((p) =>
+        p.categories.some((c) => c.slug === "gaming")
+    );
+
+      const vision = filteredProducts.find((p) =>
+        p.categories.some((c) => c.slug === "cameras")
+    );
+
+    const airpods = filteredProducts.find((p) =>
+        p.categories.some((c) => c.slug === "headphones")
+    );
+
+    const macbook = filteredProducts.find((p) =>
+        p.categories.some((c) => c.slug === "computers")
+    );
+
     return (
         <>
             <HeroCarousel slides={heroSlides} />
-            <section className="grid grid-cols-1 lg:grid-cols-2 ">
-                <div className="flex flex-col">
-                    <div className="flex flex-col sm:flex-row items-center bg-white p-6 gap-6" onClick={() => router.push(`/ProductDetail?id=${ps5?.id}`)}>
-                        <Image src={ps5?.image || SSD} alt="" width={160} height={160} className="w-40 sm:w-56 object-contain  transition-transform
-            duration-700 hover:scale-105" />
-                        <div>
-                            <p className="text-2xl sm:text-4xl  font-extrabold">{ps5?.name}</p>
-                            <p className="text-lg text-gray-600 mt-3 max-w-md">
-                                {ps5?.description}
-                            </p>
-                        </div>
-                    </div>
-                    <div className="grid grid-cols-1 sm:grid-cols-2">
-                        <div className="flex items-center bg-gray-200 p-6 gap-4" onClick={() => router.push(`/ProductDetail?id=${airpods?.id}`)}>
-                            <Image src={airpods?.image || headphone} alt="" width={112} height={112} className="w-28 object-contain  transition-transform
-            duration-700 hover:scale-105" />
-                            <div>
-                                <p className="text-2xl font-semibold">{airpods?.name?.split(" ").slice(0, -1).join(" ")} <span className="font-extrabold">{airpods?.name?.split(" ").slice(-1)[0]}</span></p>
-                                <p className="text-md text-gray-600 mt-2">
-                                    {airpods?.description}
-                                </p>
-                            </div>
-                        </div>
-                        <div className="flex items-center bg-[#353535] text-white p-6 gap-4" onClick={() => router.push(`/ProductDetail?id=${vision?.id}`)}>
-                            <Image src={vision?.image || Apro} alt="" width={112} height={112} className="w-28 object-contain  transition-transform
-            duration-700 hover:scale-105" />
-                            <div>
-                                <p className="text-2xl font-semibold">
-                                    {vision?.name}
-                                </p>
-                                <p className="text-md mt-2 text-gray-300">
-                                    {vision?.description}
-                                </p>
-                            </div>
-                        </div>
+           <section className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-stretch">
 
-                    </div>
-                </div>
-                <div className="flex  justify-center bg-gray-100 p-6 md:p-10 gap-6" onClick={() => router.push(`/ProductDetail?id=${macbook?.id}`)}>
+  {/* LEFT SECTION */}
+  <div className="flex flex-col gap-6 h-full">
 
-                    <div className="pt-45">
-                        <p className="text-3xl sm:text-5xl">
-                            <span className="font-light">{macbook?.name?.split(" ").slice(0, -1).join(" ")}</span>{" "}
-                            <span className="font-bold">{macbook?.name?.split(" ").slice(-1)[0]}</span>
-                        </p>
+    {/* TOP BIG CARD */}
+    <div
+      className="flex flex-col sm:flex-row items-center bg-white p-6 gap-6 h-full cursor-pointer"
+      onClick={() => router.push(`/ProductDetail/${ps5?.id}`)}
+    >
+      <Image
+        src={ps5?.image_url || SSD}
+        alt=""
+        width={160}
+        height={160}
+        className="w-40 sm:w-56 object-contain transition-transform duration-700 hover:scale-105"
+      />
 
-                        <p className="text-lg text-gray-600 mt-4 max-w-md">
-                            {macbook?.description}
-                        </p>
-                    </div>
-                    <Image src={phone_of_section2} alt="" width={300} height={480} className="w-full h-120 max-w-sm object-contain mx-auto  transition-transform
-            duration-700 hover:scale-105" />
-                </div>
+      <div>
+        <p className="text-2xl sm:text-4xl font-extrabold leading-tight">
+          {ps5?.name}
+        </p>
+        <p className="text-lg text-gray-600 mt-3 max-w-md">
+          {ps5?.name}
+        </p>
+      </div>
+    </div>
 
-            </section>
+    {/* BOTTOM TWO CARDS */}
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 auto-rows-fr">
+
+      {/* AIRPODS CARD */}
+      <div
+        className="flex items-center bg-gray-200 p-6 gap-4 h-full cursor-pointer"
+        onClick={() => router.push(`/ProductDetail/${airpods?.id}`)}
+      >
+        <Image
+          src={airpods?.image_url || headphone}
+          alt=""
+          width={112}
+          height={112}
+          className="w-28 object-contain transition-transform duration-700 hover:scale-105"
+        />
+
+        <div>
+          <p className="text-xl font-semibold leading-snug">
+            {airpods?.name?.split(" ").slice(0, -1).join(" ")}{" "}
+            <span className="font-extrabold">
+              {airpods?.name?.split(" ").slice(-1)[0]}
+            </span>
+          </p>
+
+          <p className="text-sm text-gray-600 mt-2 line-clamp-2">
+            {airpods?.name}
+          </p>
+        </div>
+      </div>
+
+      {/* VISION CARD */}
+      <div
+        className="flex items-center bg-[#353535] text-white p-6 gap-4 h-full cursor-pointer"
+        onClick={() => router.push(`/ProductDetail/${vision?.id}`)}
+      >
+        <Image
+          src={vision?.image_url || Apro}
+          alt=""
+          width={112}
+          height={112}
+          className="w-28 object-contain transition-transform duration-700 hover:scale-105"
+        />
+
+        <div>
+          <p className="text-xl font-semibold leading-snug">
+            {vision?.name}
+          </p>
+          <p className="text-sm mt-2 text-gray-300 line-clamp-2">
+            {vision?.name}
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  {/* RIGHT SECTION (IPAD) */}
+  <div
+    className="flex flex-col md:flex-row items-center justify-between bg-gray-100 p-6 md:p-10 gap-6 h-full cursor-pointer"
+    onClick={() => router.push(`/ProductDetail/${macbook?.id}`)}
+  >
+    <div className="flex flex-col justify-center">
+      <p className="text-3xl sm:text-5xl font-semibold leading-tight">
+        Apple iPad 9
+      </p>
+
+      <p className="text-lg text-gray-600 mt-4 max-w-md">
+        {macbook?.name}
+      </p>
+    </div>
+
+    <Image
+      src={macbook?.image_url || phone_of_section2}
+      alt=""
+      width={300}
+      height={480}
+      className="w-full max-w-sm object-contain transition-transform duration-700 hover:scale-105"
+    />
+  </div>
+
+</section>
             <section className="bg-gray-100 py-8 px-4 md:px-10 lg:px-20">
                 <div className="flex items-center justify-between mb-6">
                     <h2 className="text-xl md:text-2xl font-bold text-gray-800">
