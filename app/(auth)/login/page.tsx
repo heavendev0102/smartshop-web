@@ -76,38 +76,64 @@ export default function Page() {
                             Please sign in to your account
                         </p>
                         <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
-                            <div className="relative">
-                                <Mail
-                                    size={18}
-                                    className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
-                                />
-                                <input
-                                    type="email"
-                                    placeholder="Email address"
-                                    className="w-full pl-10 pr-3 py-3 border rounded-md focus:outline-none" {...register('email')}
-                                />
-                                {errors.email && <span style={{ color: 'red' }} className="text-sm min-h-2">{errors.email.message}</span>}
-                            </div>
-                            <div className="relative">
-                                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
 
-                                <input
-                                    type="password"
-                                    placeholder="Password"
-                                    className="w-full pl-10 pr-3 py-3 border rounded-md focus:outline-none" {...register('password')}
-                                />
-                                {errors.password && <span style={{ color: 'red' }} className="text-sm min-h-2">{errors.password.message}</span>}
+                            {/* Email */}
+                            <div>
+                                <div className="relative">
+                                    <Mail
+                                        size={18}
+                                        className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+                                    />
 
+                                    <input
+                                        type="email"
+                                        placeholder="Email address"
+                                        className="w-full pl-10 pr-3 py-3 border rounded-md focus:outline-none"
+                                        {...register("email")}
+                                    />
+                                </div>
+
+                                {errors.email && (
+                                    <span className="text-sm text-red-500">
+                                        {errors.email.message}
+                                    </span>
+                                )}
                             </div>
+
+                            {/* Password */}
+                            <div>
+                                <div className="relative">
+                                    <Lock
+                                        size={18}
+                                        className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+                                    />
+
+                                    <input
+                                        type="password"
+                                        placeholder="Password"
+                                        className="w-full pl-10 pr-3 py-3 border rounded-md focus:outline-none"
+                                        {...register("password")}
+                                    />
+                                </div>
+
+                                {errors.password && (
+                                    <span className="text-sm text-red-500">
+                                        {errors.password.message}
+                                    </span>
+                                )}
+                            </div>
+
                             <div className="flex items-center justify-between text-sm">
                                 <label className="flex items-center gap-2">
                                     <input type="checkbox" />
                                     Remember me
                                 </label>
+
                                 <Link href="#" className="text-gray-500 hover:text-black">
                                     Forgot password?
                                 </Link>
                             </div>
+
                             <button className="w-full bg-black text-white py-3 rounded-md hover:bg-gray-800 transition">
                                 Sign In
                             </button>
