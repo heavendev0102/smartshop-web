@@ -14,7 +14,7 @@ const Footer = () => {
 
           <div className="max-w-sm">
             <h2 className="text-white text-lg sm:text-xl font-semibold mb-4">
-              cyber
+              SmartShop
             </h2>
 
             <p className="text-sm leading-relaxed">
@@ -73,7 +73,7 @@ const Footer = () => {
 
         <div className="mt-10 pt-6 border-t border-gray-800 
                         text-center text-xs text-gray-500">
-          © 2026 Cyber. All rights reserved.
+          © 2026 SmartShop. All rights reserved.
         </div>
 
       </div>

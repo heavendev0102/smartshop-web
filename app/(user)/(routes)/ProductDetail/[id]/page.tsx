@@ -28,18 +28,18 @@ const Page = () => {
       return res.data;
     },
   });
-  
+
   if (isLoading) {
     return <div className="flex items-center justify-center min-h-screen bg-white">
-            <div className="flex flex-col items-center gap-4">
-                
-                <div className="w-14 h-14 border-4 border-gray-300 border-t-black rounded-full animate-spin"></div>
+      <div className="flex flex-col items-center gap-4">
 
-                <p className="text-lg font-medium text-gray-700">
-                    Loading product...
-                </p>
-            </div>
-        </div>
+        <div className="w-14 h-14 border-4 border-gray-300 border-t-black rounded-full animate-spin"></div>
+
+        <p className="text-lg font-medium text-gray-700">
+          Loading product...
+        </p>
+      </div>
+    </div>
   }
 
   if (error) {
@@ -138,22 +138,35 @@ const Page = () => {
               </h1>
 
               {/* PRICE */}
-              <div className="flex items-center gap-3 mt-5 flex-wrap">
+              <div className="flex items-center justify-center lg:justify-start gap-4 mt-8">
 
-                <span className="text-4xl font-bold text-black">
-                  ${product.current_price}
-                </span>
+                {/* IF DISCOUNT EXISTS */}
+                {product.discount_percent > 0 ? (
+                  <>
+                    {/* Current Price */}
+                    <span className="text-4xl font-bold">
+                      ₹{product.current_price}
+                    </span>
 
-                <span className="text-xl text-gray-400 line-through">
-                  ${product.original_price}
-                </span>
+                    {/* Original Price */}
+                    <span
+                      className={`line-through text-lg `}
+                    >
+                      ₹{product.original_price}
+                    </span>
 
-                <span className="bg-red-500 text-white text-sm font-semibold px-3 py-1 rounded-full">
-                  {product.discount_percent}% OFF
-                </span>
-
+                    {/* Discount Badge */}
+                    <span className="bg-red-500 text-white text-sm px-3 py-1 rounded-full font-semibold">
+                      {product.discount_percent}% OFF
+                    </span>
+                  </>
+                ) : (
+                  /* NO DISCOUNT */
+                  <span className="text-4xl font-bold">
+                    ₹{product.original_price}
+                  </span>
+                )}
               </div>
-
               {/* DESCRIPTION */}
               <p className="text-gray-600 mt-6 leading-7">
                 Experience next-gen gaming with ultra-fast load times,

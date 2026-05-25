@@ -4,101 +4,132 @@ import Image from "next/image";
 import Autoplay from "embla-carousel-autoplay";
 import { Product } from "@/app/util/type";
 import { useRouter } from "next/navigation";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel";
-
-import { StaticImageData } from "next/image";
-
-type Slide = {
-  title: string;
-  subtitle: string;
-  description: string;
-  image: string | StaticImageData; 
-  productId?: number;
-};
-
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, } from "@/components/ui/carousel";
 type HeroCarouselProps = {
   slides: Product[];
 };
 
-export default function HeroCarousel({ slides }: HeroCarouselProps) {
+export default function HeroCarousel({ slides, }: HeroCarouselProps) {
   const router = useRouter();
+  const plugin = React.useMemo(() => Autoplay({ delay: 4000, stopOnInteraction: true, }), []);
 
-  // Create plugin only once
-  const plugin = React.useMemo(
-    () =>
-      Autoplay({
-        delay: 3000,
-        stopOnInteraction: true,
-      }),
-    []
-  );
+  // Dynamic backgrounds
+  const backgrounds = [
+    {
+      bg: "from-[#e2e8f0] to-[#cbd5e1]",
+      text: "text-black",
+      subText: "text-gray-600",
+      button: "bg-black text-white hover:bg-gray-800",
+    },
+    {
+      bg: "from-[#0f172a] to-black",
+      text: "text-white",
+      subText: "text-gray-400",
+      button: "bg-white text-black hover:bg-gray-200",
+    },
+    {
+      bg: "from-[#ecfeff] to-[#dbeafe]",
+      text: "text-black",
+      subText: "text-gray-700",
+      button: "bg-black text-white hover:bg-gray-800",
+    },
+    {
+      bg: "from-[#fdf2f8] to-[#f3e8ff]",
+      text: "text-black",
+      subText: "text-gray-600",
+      button: "bg-black text-white hover:bg-gray-800",
+    },
+  ];
 
   return (
-    <Carousel
-      plugins={[plugin]}
-      opts={{ loop: true }}
-      className="w-full"
-      onMouseEnter={() => plugin.stop()}
-      onMouseLeave={() => plugin.reset()}
-    >
+    <Carousel plugins={[plugin]} opts={{ loop: true }} className="w-full" onMouseEnter={() => plugin.stop()} onMouseLeave={() => plugin.reset()} >
       <CarouselContent>
-        {slides.map((slide, index) => (
-          <CarouselItem key={index}>
-            <section className="bg-linear-to-r from-[#211C24] to-black text-white min-h-[55vh] md:min-h-[65vh] lg:min-h-[75vh] flex items-center overflow-hidden">
-              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12 items-center">
-                  {/* Left Content */}
-                  <div className="text-center md:text-left">
-                    <p className="text-sm sm:text-base lg:text-lg text-gray-400 font-semibold tracking-wide pt-3">
-                      Pro.Beyond.
-                    </p>
+        {slides.map((slide, index) => {
+          const theme = backgrounds[index % backgrounds.length];
+          return (
+            <CarouselItem key={slide.id}>
+              <section className={`bg-linear-to-r ${theme.bg} ${theme.text} min-h-[70vh] p-3 flex items-center overflow-hidden relative`} >
+                {/* Background Blur Effect */}
+                <div className="absolute inset-0 overflow-hidden">
+                  <div className="absolute w-96 h-96 bg-white/10 blur-3xl rounded-full -top-25 -left-25" />
+                  <div className="absolute w-96 h-96 bg-white/10 blur-3xl rounded-full -bottom-30 -right-25" />
+                </div>
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-10">
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                    {/* LEFT CONTENT */}
+                    <div className="text-center lg:text-left">
+                      {/* CATEGORY */}
+                      <p className={`uppercase tracking-[5px] text-sm font-semibold ${theme.subText}`} >
+                        {slide.categories?.[0]?.name || "Featured Product"}
+                      </p>
+                      {/* TITLE */}
+                      <h1 className="mt-5 text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-light leading-tight"> {slide.name} </h1>
+                      {/* DESCRIPTION */}
+                      <p
+                        className={`mt-6 max-w-xl text-base sm:text-lg leading-relaxed ${theme.subText}`}
+                      > Discover premium performance, cutting-edge technology, and a seamless experience designed for  modern lifestyles. </p>
 
-                    <h1 className="mt-3 text-4xl sm:text-5xl md:text-6xl lg:text-[72px] font-light leading-tight">
-                      {slide.name}
-                    </h1>
+                      {/* PRICE */}
+                      <div className="flex items-center justify-center lg:justify-start gap-4 mt-8">
+                        {/* IF DISCOUNT EXISTS */}
+                        {slide.discount_percent > 0 ? (
+                          <>
+                            {/* Current Price */}
+                            <span className="text-4xl font-bold">
+                              ₹{slide.current_price}
+                            </span>
 
-                    <p className="text-gray-400 mt-5 max-w-md mx-auto md:mx-0 text-sm sm:text-base lg:text-lg leading-relaxed">
-                      Experience the power of the A16 Bionic chip, advanced camera system, and stunning Super Retina XDR display.
-                    </p>
+                            {/* Original Price */}
+                            <span
+                              className={`line-through text-lg ${theme.subText}`}
+                            >
+                              ₹{slide.original_price}
+                            </span>
 
-                    <button
-                      className="mt-8 border border-white/30 px-8 py-3 rounded-xl hover:bg-white hover:text-black transition-all duration-300"
-                      onClick={() => {
-                        if (slide.id) {
-                          router.push(`/ProductDetail/${slide.id}`);
-                        }
-                      }}
-                    >
-                      View Details
-                    </button>
-                  </div>
-
-                  {/* Right Image */}
-                  <div className="relative flex justify-center md:justify-end">
-                    <Image
-                      src={slide.image_url}
-                      alt={slide.name}
-                      width={300}
-                      height={400}
-                      priority
-                      className="w-55 sm:w-72 md:w-88 lg:w-107.5 xl:w-120 h-auto object-contain transition-transform duration-700 hover:scale-105"
-                    />
+                            {/* Discount Badge */}
+                            <span className="bg-red-500 text-white text-sm px-3 py-1 rounded-full font-semibold">
+                              {slide.discount_percent}% OFF
+                            </span>
+                          </>
+                        ) : (
+                          /* NO DISCOUNT */
+                          <span className="text-4xl font-bold">
+                            ₹{slide.original_price}
+                          </span>
+                        )}
+                      </div>
+                      {/* BUTTONS */}
+                      <div className="flex flex-col sm:flex-row items-center lg:items-start gap-4 mt-10">
+                        <button className={`${theme.button} px-8 py-3 rounded-xl font-medium transition-all duration-300 shadow-lg`}
+                          onClick={() => { router.push(`/ProductDetail/${slide.id}`); }} > View Product
+                        </button>
+                        <button
+                          className={`px-8 py-3 rounded-xl transition-all duration-300 border ${theme.text === "text-white"
+                            ? "border-white/30 text-white hover:bg-white hover:text-black"
+                            : "border-black/20 text-black hover:bg-black hover:text-white"
+                            }`} onClick={() => { router.push(`/Catalog/${slide.categories?.[0]?.slug}`); }} >
+                          Explore Category
+                        </button>
+                      </div>
+                    </div>
+                    {/* RIGHT IMAGE */}
+                    <div className="relative flex justify-center lg:justify-end">
+                      {/* Glow */}
+                      <div className="absolute w-[320px] h-80 sm:w-105 sm:h-105 bg-white/20 blur-3xl rounded-full" />
+                      <Image src={slide.image_url} alt={slide.name} width={500} height={500} priority
+                        className="relative z-10 w-64 sm:w-80 md:w-96 lg:w-112.5 h-auto object-contain transition-transform duration-700 hover:scale-105" />
+                    </div>
                   </div>
                 </div>
-              </div>
-            </section>
-          </CarouselItem>
-        ))}
+              </section>
+            </CarouselItem>
+          );
+        })}
       </CarouselContent>
 
-      <CarouselPrevious className="left-4 bg-white/10 border-white/20 text-white hover:bg-white hover:text-black" />
-      <CarouselNext className="right-4 bg-white/10 border-white/20 text-white hover:bg-white hover:text-black" />
+      {/* NAVIGATION BUTTONS */}
+      <CarouselPrevious className="left-4 bg-white/20 backdrop-blur-md border-white/20 text-black hover:bg-white hover:text-black shadow-xl" />
+      <CarouselNext className="right-4 bg-white/20 backdrop-blur-md border-white/20 text-black hover:bg-white hover:text-black shadow-xl" />
     </Carousel>
   );
 }

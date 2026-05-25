@@ -9,16 +9,14 @@ const FeaturedProducts = ({
     products: Product[];
 }) => {
     const router = useRouter();
-
     const mainProduct = products[0];
     const sideProducts = products.slice(1);
-
     function productDetails(id: string) {
         router.push(`/ProductDetail/${id}`);
     }
 
     return (
-        <section className="bg-black py-10 md:py-16 lg:py-20 overflow-hidden">
+        <section className="bg-[#211C24] py-10 md:py-16 lg:py-20 overflow-hidden">
             <div className="max-w-480 mx-auto px-4 sm:px-6 lg:px-10">
 
                 {/* Heading */}
