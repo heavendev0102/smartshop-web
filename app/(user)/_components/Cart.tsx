@@ -1,5 +1,7 @@
 "use client"
+import apple_watch from "../../../public/Home/ProductList/apple_watch.png"
 import useCartStore from "@/app/store/cartStore";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { CircleX } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -9,7 +11,14 @@ interface CartProps {
 }
 const Cart = ({ isOpen, onClose }: CartProps) => {
     const router = useRouter();
-    const { removeItem, cartItems } = useCartStore();
+    const { removeItem, cartItems, fetchCart } = useCartStore();
+    const [mounted, setMounted] = useState(false);
+    useEffect(() => {
+        setTimeout(() => {
+            setMounted(true);
+            fetchCart();
+        }, 1);
+    }, []);
     const totalPrice = cartItems.reduce((sum, currentItem) => {
         return sum + currentItem.price * currentItem.quantity;
     }, 0);
@@ -19,6 +28,7 @@ const Cart = ({ isOpen, onClose }: CartProps) => {
     function goToCheckOut() {
         router.push("/CheckOut");
     }
+     if (!mounted) return null;
     return (
         <>
             {isOpen && (
@@ -40,7 +50,7 @@ const Cart = ({ isOpen, onClose }: CartProps) => {
                                 Array.isArray(cartItems) && cartItems.length > 0 ? (
                                     cartItems?.map((product) => (
                                         <div key={product.id} className="flex">
-                                            <div><Image src={product.image} alt="product Image" width={88} height={88} className="w-22 h-22 mt-2 rounded-2xl" /></div>
+                                            <div><Image src={product.image || apple_watch} alt="product Image" width={88} height={88} className="w-22 h-22 mt-2 rounded-2xl" /></div>
                                             <div className="mt-2" ><p className="ml-11">{product.name}</p>
                                                 <div className="ml-11 flex">
                                                     <div className="flex ">

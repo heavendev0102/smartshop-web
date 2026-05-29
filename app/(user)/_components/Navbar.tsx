@@ -1,5 +1,4 @@
 "use client";
-
 import Link from "next/link";
 import { Heart, ShoppingCart, Search, User, Menu, X } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
@@ -15,18 +14,22 @@ interface userType {
 const Navbar = () => {
   const router = useRouter();
   const pathname = usePathname();
-  const { openCart } = useCartStore();
-  const totalQty = useCartStore((state) =>  state.getTotalQty() );
+  const { openCart , cartItems , fetchCart} = useCartStore();
+  const totalQty = cartItems.reduce((sum, item) => sum + item.quantity, 0);
   const [mounted, setMounted] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [isLoggedIn, setIsLoggedIn] =  useState(false);
   const [user, setUser] = useState<userType | null>(null);
+  const clearCart = useCartStore(
+  (state) => state.clearCart
+);
 
   useEffect(() => {
     setTimeout(() => {
       setMounted(true);
+      fetchCart();
       const token =  localStorage.getItem("access_token");
       const storedUser =  localStorage.getItem("user");
       setIsLoggedIn(!!token);
@@ -51,7 +54,8 @@ const Navbar = () => {
   function handleLogout() {
     localStorage.removeItem("access_token");
     localStorage.removeItem("user");
-    localStorage.removeItem(  "redirect_after_login");
+    localStorage.removeItem("redirect_after_login");
+    clearCart();
     setIsLoggedIn(false);
     setShowDropdown(false);
     setMobileMenuOpen(false);

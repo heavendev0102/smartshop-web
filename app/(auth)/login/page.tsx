@@ -10,6 +10,7 @@ import { AxiosError } from 'axios';
 import api from "@/app/util/apiClient";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import useCartStore from "@/app/store/cartStore";
 interface ErrorResponse {
     detail: string;
 }
@@ -18,11 +19,13 @@ export default function Page() {
         resolver: zodResolver(signInValidationSchema), defaultValues: { email: "", password: "" }
     });
     const router = useRouter();
+    const mergeGuestCart = useCartStore((state) => state.mergeGuestCart );
     async function onSubmit(data: SignInFormInputs) {
         try {
             const response = await api.post("/api/v1/users/login", data);
             localStorage.setItem("access_token", response.data.access_token);
             localStorage.setItem("user", JSON.stringify(response.data.user));
+            await mergeGuestCart();
             toast.success("Login successful!");
             reset();
             const redirectPath = localStorage.getItem("redirect_after_login") || "/";

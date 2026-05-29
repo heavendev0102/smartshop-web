@@ -1,13 +1,14 @@
 'use client';
+import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import { Suspense } from "react";
 import api from "@/app/util/apiClient";
 // import { notFound } from "next/navigation";
 import Breadcrumb from "../../../_components/Breadcrumb";
 import Image from "next/image";
-// import ProductCard from "../../../_components/ProductCard";
-// import { Product } from "@/app/util/type";
-// import useCartStore from "@/app/store/cartStore";
+import ProductCard from "../../../_components/ProductCard";
+import { Product } from "@/app/util/type";
+import useCartStore from "@/app/store/cartStore";
 // import { Check } from "lucide-react";
 // import { useState } from "react";
 // import { useRouter } from "next/navigation";
@@ -15,9 +16,33 @@ import { CategorySlug, SectionSlug } from "@/app/util/type";
 import { useQuery } from "@tanstack/react-query";
 const Page = () => {
   const params = useParams();
+  const [relatedProducts, setRelatedProducts] = useState<Product[]>([]);
+  const [loadingRelated, setLoadingRelated] = useState(false);
   // const router = useRouter();
+  const { addToCart, openCart, cartItems } = useCartStore();
   const { id } = params;
-  console.log("id := ", id);
+  useEffect(() => {
+    if (!id) return;
+
+    const fetchRecommendedProducts = async () => {
+      try {
+        setLoadingRelated(true);
+
+        const response = await api.get(
+          `api/v1/products/${id}/recommended`
+        );
+
+        setRelatedProducts(response.data);
+        console.log("relatedProducts :==== " + relatedProducts);
+      } catch (error) {
+        console.error("Failed to fetch recommended products:", error);
+      } finally {
+        setLoadingRelated(false);
+      }
+    };
+
+    fetchRecommendedProducts();
+  }, [id]);
   const { data: product, isLoading, error } = useQuery({
     queryKey: ["products", id],
 
@@ -48,7 +73,7 @@ const Page = () => {
   console.log(product.name);
 
   // const product = products.find((p) => p.id.toString() === id);
-  // const { addToCart, openCart, cartItems } = useCartStore();
+
   // const [showError, setShowError] = useState(false);
 
   // if (!product) return notFound();
@@ -57,6 +82,10 @@ const Page = () => {
   //   addToCart(product, qty);
   //   openCart();
   // }
+  const handleAddToCart = async (product: Product, qty: number) => {
+    await addToCart(product, qty);
+    openCart();
+  };
 
   // const isAdded = cartItems.some(item => item.id === product.id);
   // const isOutOfStock = (product?.stock ?? 0) === 0;
@@ -205,7 +234,7 @@ const Page = () => {
               {/* BUTTONS */}
               <div className="flex gap-4 mt-8 flex-wrap">
 
-                <button className="bg-black text-white px-8 py-3 rounded-xl hover:bg-gray-800 transition">
+                <button className="bg-black text-white px-8 py-3 rounded-xl hover:bg-gray-800 transition" onClick={() => handleAddToCart(product, 1)}>
                   Add to Cart
                 </button>
 
@@ -248,11 +277,21 @@ const Page = () => {
           </div>
         </div>
         <div className="pb-5 border-t-2 mt-10">
-          <p className='font-medium text-center text-[36px] mt-10 ml-20'>Related Products</p>
-          {/* <div className="grid grid-cols-1 md:grid-cols-4 gap-y-3 gap-x-3 mt-10 ml-13">
-          {relatedProducts?.map((product: Product) => (
-            <ProductCard key={product.id} product={product} />
-          ))}</div> */}
+
+          {/* TITLE */}
+          <p className="font-medium text-center text-[36px] mt-10">
+            Related Products
+          </p>
+
+          {/* PRODUCTS */}
+          <div className="max-w-7xl mx-auto px-4 mt-10">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {relatedProducts?.map((product: Product) => (
+                <ProductCard key={product.id} product={product} />
+              ))}
+            </div>
+          </div>
+
         </div>
       </Suspense>
     </>

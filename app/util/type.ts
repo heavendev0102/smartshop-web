@@ -60,20 +60,35 @@ interface cartProduct {
   image: string;
   stock: number;
 }
+export interface BackendCartItem {
+  id: number;
+  product_id: number;
+  quantity: number;
 
+  product: {
+    id: number;
+    name: string;
+    image_url: string;
+    current_price: string;
+    stock: number;
+  };
+}
 export interface CartItem extends cartProduct {
   quantity: number;
+  cart_item_id?: number; // db cart item id
 }
 
 export interface CartStore {
   cartItems: CartItem[];
   isCartOpen: boolean;
+  fetchCart: () => Promise<void>;
+  mergeGuestCart: () => Promise<void>;
   openCart: () => void;
   closeCart: () => void;
-  addToCart: (product: cartProduct , qty : number) => void;
+  addToCart: (product: Product, qty: number) => Promise<void>;
   clearCart: () => void;
   getTotalQty: () => number;
-  removeItem: (id: number) => void;
+  removeItem: (id:number)=>Promise<void>
   updateQty: (id: number, qty: number) => void;
 }
 
@@ -141,11 +156,8 @@ export interface ProductSection {
 
 export interface StorefrontResponse {
   categories: Category[];
-
   new_arrivals: ProductSection;
-
   bestsellers: ProductSection;
-
   featured: ProductSection;
 }
 

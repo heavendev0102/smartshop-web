@@ -1,31 +1,21 @@
 "use client";
-
+import apple_watch from "../../../public/Home/ProductList/apple_watch.png"
 import useCartStore from "@/app/store/cartStore";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function MiniCart() {
-  const {
-    cartItems,
-    isCartOpen,
-    closeCart,
-    updateQty,
-    getTotalQty,
-  } = useCartStore();
-
+  const { cartItems, isCartOpen, closeCart, updateQty, getTotalQty , fetchCart} = useCartStore();
   const router = useRouter();
   const [mounted, setMounted] = useState(false);
   useEffect(() => {
     setTimeout(() => {
       setMounted(true);
+      fetchCart();
     }, 1);
-
   }, []);
-  const totalPrice = cartItems.reduce(
-    (sum, item) => sum + item.price * item.quantity,
-    0
-  );
+  const totalPrice = cartItems.reduce( (sum, item) => sum + item.price * item.quantity, 0);
   if (!mounted) return null;
   return (
     <>
@@ -86,7 +76,7 @@ export default function MiniCart() {
 
                   {/* Image */}
                   <Image
-                    src={item.image}
+                    src={item.image || apple_watch}
                     alt=""
                     width={60}
                     height={60}

@@ -1,19 +1,25 @@
 "use client";
-import heroImage2 from "../../../../public/common/aboutbg3.png";
+import apple_watch from "../../../../public/Home/ProductList/apple_watch.png"
 import useCartStore from "@/app/store/cartStore";
 import Image from "next/image";
 import { Trash } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { CircleCheckBig } from "lucide-react";
-import { useState } from "react";
+import { useState , useEffect } from "react";
 const Page = () => {
     const router = useRouter();
     const [showError, setShowError] = useState(false);
-    const { cartItems, updateQty, removeItem, getTotalQty } = useCartStore();
+    const { cartItems, updateQty, removeItem, getTotalQty , fetchCart } = useCartStore();
     const totalPrice = cartItems.reduce((sum, currentItem) => {
         return sum + currentItem.price * currentItem.quantity;
     }, 0);
-
+    const [mounted, setMounted] = useState(false);
+    useEffect(() => {
+        setTimeout(() => {
+            setMounted(true);
+            fetchCart();
+        }, 1);
+    }, []);
    const handleBuyNow = () => {
     const token = localStorage.getItem("access_token");
     if (cartItems.length === 0) {
@@ -27,6 +33,7 @@ const Page = () => {
     }
     router.push("/CheckOut");
 };
+ if (!mounted) return null;
     return (
         <>
 
@@ -55,7 +62,7 @@ const Page = () => {
                                         <tr key={product.id} className="border-b">
 
                                             <td className="p-4 flex items-center gap-4">
-                                                <Image src={product.image} width={70} height={70} className="rounded-lg" alt="" />
+                                                <Image src={product.image || apple_watch} width={70} height={70} className="rounded-lg" alt="" />
                                                 <span>{product.name}</span>
                                             </td>
 
