@@ -23,10 +23,7 @@ export default function Page() {
 
   return (
     <div className="w-full max-w-6xl mx-auto px-6">
-
-    
       <StepBar step={step} onStepChange={handleStepChange} />
-
       {step === 1 && (
         <Address onNext={() => handleStepChange(2)} />
       )}

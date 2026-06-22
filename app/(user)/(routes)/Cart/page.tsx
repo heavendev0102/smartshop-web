@@ -5,11 +5,11 @@ import Image from "next/image";
 import { Trash } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { CircleCheckBig } from "lucide-react";
-import { useState , useEffect } from "react";
+import { useState, useEffect } from "react";
 const Page = () => {
     const router = useRouter();
     const [showError, setShowError] = useState(false);
-    const { cartItems, updateQty, removeItem, getTotalQty , fetchCart } = useCartStore();
+    const { cartItems, updateQty, removeItem, getTotalQty, fetchCart } = useCartStore();
     const totalPrice = cartItems.reduce((sum, currentItem) => {
         return sum + currentItem.price * currentItem.quantity;
     }, 0);
@@ -20,20 +20,20 @@ const Page = () => {
             fetchCart();
         }, 1);
     }, []);
-   const handleBuyNow = () => {
-    const token = localStorage.getItem("access_token");
-    if (cartItems.length === 0) {
-        setShowError(true);
-        return;
-    }
-    if (!token) {
-        localStorage.setItem("redirect_after_login", "/CheckOut");
-        router.push("/login");
-        return; 
-    }
-    router.push("/CheckOut");
-};
- if (!mounted) return null;
+    const handleBuyNow = () => {
+        const token = localStorage.getItem("access_token");
+        if (cartItems.length === 0) {
+            setShowError(true);
+            return;
+        }
+        if (!token) {
+            localStorage.setItem("redirect_after_login", "/CheckOut");
+            router.push("/login");
+            return;
+        }
+        router.push("/CheckOut");
+    };
+    if (!mounted) return null;
     return (
         <>
 
@@ -70,9 +70,14 @@ const Page = () => {
                                             <td className="p-4">
                                                 <div className="inline-flex items-center border border-gray-300 rounded-full overflow-hidden text-sm">
                                                     <button
-                                                        onClick={() => updateQty(product!.id!, product.quantity - 1)}
-                                                        disabled={product.quantity <= 1}
-                                                        className="px-2 py-1 text-gray-600 hover:bg-black hover:text-white transition disabled:opacity-30"
+                                                        onClick={() => {
+                                                            if (product.quantity === 1) {
+                                                                removeItem(product.id);
+                                                            } else {
+                                                                updateQty(product.id, product.quantity - 1);
+                                                            }
+                                                        }}
+                                                        className="px-2 py-1 text-gray-600 hover:bg-black hover:text-white transition"
                                                     >
                                                         −
                                                     </button>

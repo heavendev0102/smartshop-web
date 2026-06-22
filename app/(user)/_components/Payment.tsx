@@ -1,11 +1,12 @@
 "use client";
 import Image from "next/image";
 import useCartStore from "@/app/store/cartStore";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import paypal from "../../../public/Home/paypal.png";
 import { useCheckoutStore } from "@/app/store/checkOutStore";
 import Script from "next/script";
 import { useRouter } from "next/navigation";
+import api from "@/app/util/apiClient";
 type FormDataType = {
     cardName: string;
     cardNumber: string;
@@ -19,7 +20,18 @@ type ErrorType = {
     expiry: string;
     cvv: string;
 };
+interface OrderPreview {
+    address: string;
+    shipment_method: string;
+    subtotal: string;
+    estimated_tax: string;
+    shipping_charge: string;
+    total: string;
+}
 export default function Payment({ onBack }: { onBack: () => void }) {
+    const [preview, setPreview] = useState<OrderPreview | null>(null);
+    const [loading, setLoading] = useState(false);
+
     const [formData, setFormData] = useState<FormDataType>({
         cardName: "",
         cardNumber: "",
@@ -76,18 +88,58 @@ export default function Payment({ onBack }: { onBack: () => void }) {
         }));
     };
 
-    const [paymentType, setPaymentType] = useState("Credit Card");
+    const [paymentType, setPaymentType] = useState("credit_card");
     const router = useRouter();
     const {
         setPaymentMethod,
-        addressDetails,
-        shippingMethod,
-        clearSelectedAddressId,
-        clearShippingMethod
+        clearCheckout, paymentMethod
+        , selectedAddressId,
+        selectedDeliveryOptionId,
+        deliveryDate,
     } = useCheckoutStore();
 
     const { cartItems, clearCart } = useCartStore();
-    const handlePayments = () => {
+
+
+    useEffect(() => {
+        const fetchPreview = async () => {
+            if (
+                !selectedAddressId ||
+                !selectedDeliveryOptionId ||
+                !deliveryDate
+            ) {
+                return;
+            }
+
+            try {
+                setLoading(true);
+
+                const response = await api.post(
+                    "/api/v1/orders/preview",
+                    {
+                        address_id: selectedAddressId,
+                        delivery_option_id: selectedDeliveryOptionId,
+                        delivery_date: deliveryDate,
+                    }
+                );
+
+                setPreview(response.data);
+            } catch (error) {
+                console.error("Preview API Error:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchPreview();
+    }, [
+        selectedAddressId,
+        selectedDeliveryOptionId,
+        deliveryDate,
+    ]);
+
+
+    const handlePayments = async () => {
         const newErrors: ErrorType = {
             cardName: "",
             cardNumber: "",
@@ -96,17 +148,8 @@ export default function Payment({ onBack }: { onBack: () => void }) {
         };
 
         let isValid = true;
-        if (paymentType === "PayPal") {
-            window.open("https://www.paypal.com/");
-            return;
-        }
-
-        // Redirect PayPal Credit
-        if (paymentType === "PayPal Credit") {
-            window.open("https://www.paypal.com/us/digital-wallet/ways-to-pay/buy-now-pay-later");
-            return;
-        }
-        if (paymentType === "Credit Card") {
+        
+        if (paymentType === "credit_card") {
             if (!formData.cardName.trim()) {
                 newErrors.cardName =
                     "Card holder name is required";
@@ -175,61 +218,40 @@ export default function Payment({ onBack }: { onBack: () => void }) {
         }
 
         setErrors(newErrors);
-
         if (!isValid) return;
-        const currentUser = JSON.parse(
-            localStorage.getItem("currentUser") || "{}"
-        );
-        // Demo Order
-        const order = {
-            orderId: "ORD-" + new Date().getTime(),
-            userId: currentUser.id,
-            userName: currentUser.firstName + " " + currentUser.lastName,
-            items: cartItems.map((item) => ({
-                productId: item.id,
-                name: item.name,
-            })),
-            totalAmount: totalPrice,
-            paymentMethod: paymentType,
 
-            paymentDetails:
-                paymentType === "Credit Card"
-                    ? {
-                        cardHolder:
-                            formData.cardName,
-                        last4:
-                            formData.cardNumber.slice(
-                                -4
-                            ),
-                    }
-                    : {
-                        method: paymentType,
-                    },
-        };
-        const storedOrders = localStorage.getItem("orders");
-        const orders = storedOrders ? JSON.parse(storedOrders) : [];
-        orders.push(order);
-        localStorage.setItem("orders", JSON.stringify(orders));
-        // Reset form
-        setFormData({
-            cardName: "",
-            cardNumber: "",
-            expiry: "",
-            cvv: "",
-        });
-        clearCart();
-        clearSelectedAddressId();
-        clearShippingMethod();
-        // Redirect
-        router.push("/PaymentSuccessPage");
+        try {
+            const response = await api.post(
+                "/api/v1/orders",
+                {
+                    address_id: selectedAddressId,
+                    delivery_option_id: selectedDeliveryOptionId,
+                    delivery_date: deliveryDate,
+                    payment_method: paymentMethod,
+                }
+            );
+
+            const orderId = response.data.order_id;
+
+            clearCart();
+            clearCheckout();
+
+            router.push(
+                `/PaymentSuccessPage?orderId=${orderId}`
+            );
+
+
+        } catch (error) {
+            console.error(error);
+        }
     };
     const handlePaymentMethodChange = (method: string) => {
         setPaymentType(method);
         setPaymentMethod(method);
     }
-    const totalPrice = cartItems.reduce((sum, currentItem) => {
-        return sum + currentItem.price * currentItem.quantity;
-    }, 0);
+    // const totalPrice = cartItems.reduce((sum, currentItem) => {
+    //     return sum + currentItem.price * currentItem.quantity;
+    // }, 0);
 
 
     return (
@@ -247,7 +269,7 @@ export default function Payment({ onBack }: { onBack: () => void }) {
                                 key={i}
                                 className="flex justify-between items-center bg-gray-100 p-3 rounded-lg">
                                 <span className="text-sm">{item.name}</span>
-                                {/* <span className="font-medium">Qty.{item.quantity}</span> */}
+                                <span className="font-medium">Qty : {item.quantity}</span>
                                 <span className="font-medium">Rs.{item.price.toFixed(2)}</span>
                             </div>
                         ))}
@@ -256,33 +278,33 @@ export default function Payment({ onBack }: { onBack: () => void }) {
                     {/* Address */}
                     <div className="mt-6 text-sm text-gray-600">
                         <p className="font-medium mb-1">Address</p>
-                        <p>{addressDetails.address}</p>
+                        <p>{preview?.address}</p>
                     </div>
 
                     {/* Shipment */}
                     <div className="mt-4 text-sm text-gray-600">
                         <p className="font-medium mb-1">Shipment method</p>
-                        <p>{shippingMethod}</p>
+                        <p>{preview?.shipment_method}</p>
                     </div>
                     {/*  */}
                     {/* Price Details */}
                     <div className="mt-6 space-y-2 text-sm">
                         <div className="flex justify-between">
                             <span>Subtotal</span>
-                            <span>Rs.{totalPrice.toFixed(2)}</span>
+                            <span>Rs.{preview?.subtotal}</span>
                         </div>
                         <div className="flex justify-between">
                             <span>Estimated Tax</span>
-                            <span>Rs.50</span>
+                            <span>Rs.{preview?.estimated_tax}</span>
                         </div>
                         <div className="flex justify-between">
                             <span>Shipping & Handling</span>
-                            <span>Rs.29</span>
+                            <span>Rs.{preview?.shipping_charge}</span>
                         </div>
 
                         <div className="flex justify-between font-semibold text-base mt-3">
                             <span>Total</span>
-                            <span>Rs.{(totalPrice + 50 + 29).toFixed(2)}</span>
+                            <span>Rs.{preview?.total}</span>
                         </div>
                     </div>
                 </div>
@@ -293,7 +315,7 @@ export default function Payment({ onBack }: { onBack: () => void }) {
 
                     {/* Tabs */}
                     <div className="flex gap-6 border-b mb-6">
-                        {["Credit Card", "PayPal", "PayPal Credit"].map((tab) => (
+                        {["credit_card", "paypal", "paypal_credit"].map((tab) => (
                             <button
                                 key={tab}
                                 onClick={() => handlePaymentMethodChange(tab)}
@@ -309,7 +331,7 @@ export default function Payment({ onBack }: { onBack: () => void }) {
 
                     {/* CARD PREVIEW */}
                     {/* CONTENT BASED ON TAB */}
-                    {paymentType === "Credit Card" && (
+                    {paymentType === "credit_card" && (
                         <>
                             <div className="bg-black text-white rounded-xl p-6 mb-6 relative overflow-hidden">
                                 <div className="text-sm opacity-70 mb-6">Cardholder</div>
@@ -401,7 +423,7 @@ export default function Payment({ onBack }: { onBack: () => void }) {
                         </>
                     )}
 
-                    {paymentType === "PayPal" && (
+                    {paymentType === "paypal" && (
                         <div className="flex flex-col items-center justify-center py-10 text-center">
                             <Image
                                 src={paypal}
@@ -413,19 +435,19 @@ export default function Payment({ onBack }: { onBack: () => void }) {
                             <p className="text-gray-600 mb-4">
                                 You will be redirected to PayPal to complete your purchase securely.
                             </p>
-                            <button className="bg-blue-500 text-white px-6 py-2 rounded-md">
+                            <button className="bg-blue-500 text-white px-6 py-2 rounded-md" onClick={() => window.open("https://www.paypal.com/")}>
                                 Continue with PayPal
                             </button>
                         </div>
                     )}
 
-                    {paymentType === "PayPal Credit" && (
+                    {paymentType === "paypal_credit" && (
                         <div className="flex flex-col items-center justify-center py-10 text-center">
                             <p className="text-lg font-medium mb-2">PayPal Credit</p>
                             <p className="text-gray-600 mb-4">
                                 Buy now and pay later using PayPal Credit.
                             </p>
-                            <button className="bg-blue-600 text-white px-6 py-2 rounded-md">
+                            <button className="bg-blue-600 text-white px-6 py-2 rounded-md" onClick={() => window.open("https://www.paypal.com/us/digital-wallet/ways-to-pay/buy-now-pay-later")}>
                                 Apply & Continue
                             </button>
                         </div>

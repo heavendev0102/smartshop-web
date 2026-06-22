@@ -1,30 +1,20 @@
 "use client";
-
+import { useWishlist, WishlistItem } from "@/app/hook/useWishList";
 import {  Product } from "@/app/util/type";
-import { useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-
 const ProductCard = ({ product }: { product: Product }) => {
-  const [wishlist, setWishlist] = useState<number[]>([]);
   const router = useRouter();
-
-  const toggleWishlist = (id: number) => {
-    setWishlist((prev) =>
-      prev.includes(id)
-        ? prev.filter((item) => item !== id)
-        : [...prev, id]
-    );
-  };
-
+  const {wishlist,addToWishlist,removeFromWishlist,} = useWishlist();
+  
+  const wishlistItem = wishlist.find(
+  (item: WishlistItem) => item.product.id === product.id
+);
+const isWishlisted = !!wishlistItem;
   function productDetails(id: string) {
     router.push(`/ProductDetail/${id}`);
   }
-
-  const imageSrc =
-    product.image_url?.trim()
-      ? product.image_url
-      : "/common/placeholder.png";
+  const imageSrc = product.image_url?.trim()? product.image_url : "/common/placeholder.png";
 
   return (
     <div
@@ -33,12 +23,17 @@ const ProductCard = ({ product }: { product: Product }) => {
       {/* Wishlist */}
       <div className="flex justify-end">
         <button
-          onClick={() => toggleWishlist(product.id)}
+          onClick={() => {
+            if (isWishlisted) {
+              removeFromWishlist(wishlistItem.id);
+            } else {
+              addToWishlist(product.id);
+              
+            }
+          }}
           className="text-red-500 text-xl"
         >
-          {wishlist.includes(product.id)
-            ? "❤️"
-            : "🤍"}
+          {isWishlisted? "❤️" : "🤍"}
         </button>
       </div>
 

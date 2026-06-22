@@ -4,6 +4,7 @@ import { Josefin_Sans } from "next/font/google";
 import { Toaster } from "sonner";
 import AppShell from "@/components/AppShell";
 import Provider from "./Provider";
+import MiniWishlist from "./(user)/_components/MiniWishList";
 const josefin = Josefin_Sans({
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700"],
@@ -31,9 +32,7 @@ export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
-}>) 
-
-{
+}>) {
 
   return (
     <html
@@ -42,11 +41,17 @@ export default function RootLayout({
     >
 
       <body className="min-h-full flex flex-col font-sans">
-        
-        <AppShell><Provider>{children}</Provider></AppShell>
-       
+
+
+        <Provider>
+          <AppShell>
+            {children}
+            <MiniWishlist />
+          </AppShell>
+        </Provider>
+
         <Toaster position="top-right" richColors />
-        
+
       </body>
     </html>
   );

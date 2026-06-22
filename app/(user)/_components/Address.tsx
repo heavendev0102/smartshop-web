@@ -4,7 +4,14 @@ import { useEffect, useState } from "react";
 import { Pencil, X, Plus } from "lucide-react";
 import { useCheckoutStore } from "@/app/store/checkOutStore";
 import { addressDetails } from "@/app/util/type";
-
+import api from "@/app/util/apiClient";
+interface AddressResponseProps {
+  id: number,
+  title: string,
+  phone: string,
+  address: string,
+  status: string,
+}
 export default function Address({ onNext }: { onNext: () => void }) {
   const {
     selectedAddressId,
@@ -41,54 +48,9 @@ export default function Address({ onNext }: { onNext: () => void }) {
     setEditingId(null);
   };
 
-  const handleSave = () => {
-    // Prevent empty fields
-    if (
-      !formData.name.trim() ||
-      !formData.address.trim() ||
-      !formData.phone.trim()
-    ) {
-      alert("Please fill all fields");
-      return;
-    }
 
-    // UPDATE ADDRESS
-    if (editingId !== null) {
-      const updatedAddresses = allAddresses.map((addr) =>
-        addr.id === editingId
-          ? {
-              ...addr,
-              ...formData,
-            }
-          : addr
-      );
 
-      setAllAddresses(updatedAddresses);
-
-      setShowForm(false);
-      resetForm();
-
-      return;
-    }
-
-    // ADD NEW ADDRESS
-    const newAddress:  addressDetails = {
-      id: Date.now(),
-      ...formData,
-    };
-
-    const updatedAddresses = [...allAddresses, newAddress];
-
-    setAllAddresses(updatedAddresses);
-
-    setSelectedAddressId(newAddress.id!);
-
-    setShowForm(false);
-
-    resetForm();
-  };
-
-  const handleEdit = (addr:  addressDetails) => {
+  const handleEdit = (addr: addressDetails) => {
     setEditingId(addr.id!);
 
     setFormData({
@@ -101,14 +63,96 @@ export default function Address({ onNext }: { onNext: () => void }) {
     setShowForm(true);
   };
 
-  const handleDelete = (id: number) => {
-    removeAddress(id);
+  const fetchAddresses = async () => {
+    try {
+      const res = await api.get("/api/v1/addresses/");
+
+      const formattedAddresses = res.data.map((item: AddressResponseProps) => ({
+        id: item.id,
+        name: item.title,
+        phone: item.phone,
+        address: item.address,
+        type: item.status,
+      }));
+
+      setAllAddresses(formattedAddresses);
+
+      if (formattedAddresses.length > 0) {
+        setSelectedAddressId(formattedAddresses[0].id);
+      }
+    } catch (error) {
+      console.error("Failed to fetch addresses", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchAddresses();
+  }, []);
+
+  const handleDelete = async (id: number) => {
+    try {
+      await api.delete(`/api/v1/addresses/${id}`);
+
+      await fetchAddresses();
+    } catch (error) {
+      console.error("Delete address failed:", error);
+    }
   };
 
   const selectedAddress = allAddresses.find(
     (addr) => addr.id === selectedAddressId
   );
 
+  const handleSave = async () => {
+    if (
+      !formData.name.trim() ||
+      !formData.address.trim() ||
+      !formData.phone.trim()
+    ) {
+      alert("Please fill all fields");
+      return;
+    }
+
+    try {
+      // UPDATE ADDRESS
+      if (editingId !== null) {
+        await api.put(
+          `/api/v1/addresses/${editingId}`,
+          {
+            title: formData.name,
+            phone: formData.phone,
+            address: formData.address,
+            status: formData.type,
+          }
+        );
+
+        await fetchAddresses();
+
+        setShowForm(false);
+        resetForm();
+
+        return;
+      }
+
+      // ADD NEW ADDRESS
+      await api.post(
+        "/api/v1/addresses/",
+        {
+          title: formData.name,
+          phone: formData.phone,
+          address: formData.address,
+          status: formData.type,
+        }
+      );
+
+      await fetchAddresses();
+
+      setShowForm(false);
+      resetForm();
+    } catch (error) {
+      console.error("Save address failed:", error);
+    }
+  };
   useEffect(() => {
     if (selectedAddress) {
       setAddressDetails({
@@ -149,11 +193,10 @@ export default function Address({ onNext }: { onNext: () => void }) {
               <div
                 key={addr.id}
                 onClick={() => setSelectedAddressId(addr.id!)}
-                className={`border rounded-lg p-4 flex justify-between cursor-pointer transition ${
-                  selectedAddressId === addr.id
-                    ? "bg-gray-200"
-                    : "bg-white"
-                }`}
+                className={`border rounded-lg p-4 flex justify-between cursor-pointer transition ${selectedAddressId === addr.id
+                  ? "bg-gray-200"
+                  : "bg-white"
+                  }`}
               >
                 <div className="flex gap-3">
                   <input
