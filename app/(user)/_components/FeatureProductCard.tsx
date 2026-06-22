@@ -70,7 +70,7 @@ const FeaturedProducts = ({
 
                         <div className="relative w-full md:w-[40%] h-55 lg:h-75">
                             <Image
-                                src={mainProduct.image_url || placeholder}
+                                src={mainProduct.image_url! || placeholder}
                                 alt={mainProduct?.name}
                                 fill
                                 className=" object-contain transition-transform duration-700 group-hover:scale-105"

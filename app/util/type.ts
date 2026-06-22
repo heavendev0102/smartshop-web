@@ -64,7 +64,6 @@ export interface BackendCartItem {
   id: number;
   product_id: number;
   quantity: number;
-
   product: {
     id: number;
     name: string;
@@ -192,3 +191,13 @@ export type ApiError = {
   message?: string;
   detail?: string;
 };
+
+export interface Blog {
+    id: number;
+    title: string;
+    slug: string;
+    image_url: string;
+    short_description: string;
+    author: string;
+    created_date: string;
+}

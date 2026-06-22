@@ -1,44 +1,67 @@
 "use client";
+
 import Link from "next/link";
+
 type Props = {
   category?: string;
   company?: string;
   product?: string;
 };
 
-export default function Breadcrumb({ category, company, product }: Props) {
+export default function Breadcrumb({
+  category,
+  company,
+  product,
+}: Props) {
   return (
-    <div className="text-md ml-37 pt-5 text-gray-500 mb-4 flex items-center gap-2">
+    <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 pt-4 lg:pt-6">
 
-      <Link href="/" className="hover:text-black">
-        Home
-      </Link>
+      <div className="flex flex-wrap items-center gap-2 text-sm sm:text-base text-gray-500">
 
-      
-      {category && (
-        <>
-          <Link href={`/Catalog/${category}`} className="hover:text-black">
-          <span>&gt;</span>
-            <span className=" capitalize">{category}</span></Link>
-        </>
-      )}
+        <Link
+          href="/"
+          className="hover:text-black transition-colors duration-200"
+        >
+          Home
+        </Link>
 
-      {company && (
-        <>
-          <Link href={`/Catalog/${category}`} className="hover:text-black">
-            <span>&gt;</span>
-            <span className=" capitalize">{company}</span>
-          </Link>
-        </>
-      )}
+        {category && (
+          <>
+            <span className="text-gray-400">&gt;</span>
 
-      {product && (
-        <>
-          <span>&gt;</span>
-          <span className="text-black capitalize">{product}</span>
-        </>
-      )}
+            <Link
+              href={`/Catalog/${category}`}
+              className="capitalize hover:text-black transition-colors duration-200"
+            >
+              {category}
+            </Link>
+          </>
+        )}
 
+        {company && (
+          <>
+            <span className="text-gray-400">&gt;</span>
+
+            <Link
+              href={`/Catalog/${category}`}
+              className="capitalize hover:text-black transition-colors duration-200"
+            >
+              {company}
+            </Link>
+          </>
+        )}
+
+        {product && (
+          <>
+            <span className="text-gray-400">&gt;</span>
+
+            <span className="capitalize text-black font-medium break-words">
+              {product}
+            </span>
+          </>
+        )}
+
+      </div>
     </div>
   );
 }

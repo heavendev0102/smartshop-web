@@ -1,58 +1,88 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import { addressDetails , shipDetails} from "../util/type";
+
+import { addressDetails, shipDetails } from "../util/type";
 
 interface CheckoutStore {
+    // Address
     selectedAddressId: number | null;
-
     addressDetails: addressDetails;
     allAddresses: addressDetails[];
 
+    // Shipping
+    selectedDeliveryOptionId: number | null;
     shipDetails: shipDetails;
-
     shippingMethod: string | null;
+    deliveryDate: string | null;
+
+    // Payment
     paymentMethod: string;
 
+    // Address Actions
     setSelectedAddressId: (id: number) => void;
-
-    setAddressDetails: (details: addressDetails) => void;
     clearSelectedAddressId: () => void;
 
+    setAddressDetails: (details: addressDetails) => void;
     setAllAddresses: (addresses: addressDetails[]) => void;
 
+    removeAddress: (id: number) => void;
+
+    // Shipping Actions
+    setSelectedDeliveryOptionId: (id: number) => void;
+    clearSelectedDeliveryOptionId: () => void;
+
     setShipDetails: (details: shipDetails) => void;
-    clearShippingMethod: () => void;
 
     setShippingMethod: (method: string) => void;
+    clearShippingMethod: () => void;
 
+    setDeliveryDate: (date: string) => void;
+    clearDeliveryDate: () => void;
+
+    // Payment Actions
     setPaymentMethod: (method: string) => void;
 
-    removeAddress: (id: number) => void;
+    // Checkout Reset
+    clearCheckout: () => void;
 }
 
 export const useCheckoutStore = create<CheckoutStore>()(
     persist(
         (set) => ({
+            // Address
             selectedAddressId: null,
             addressDetails: {},
             allAddresses: [],
+
+            // Shipping
+            selectedDeliveryOptionId: null,
             shipDetails: {},
             shippingMethod: null,
-            paymentMethod: "Credit Card",
+            deliveryDate: null,
 
-            setSelectedAddressId: (id) => set({ selectedAddressId: id }),
+            // Payment
+            paymentMethod: "credit_card",
 
-            setAddressDetails: (details) => set({ addressDetails: details }),
-            clearSelectedAddressId: () => set({ selectedAddressId: null }),
+            // Address Actions
+            setSelectedAddressId: (id) =>
+                set({
+                    selectedAddressId: id,
+                }),
 
-            setAllAddresses: (addresses) => set({ allAddresses: addresses }),
+            clearSelectedAddressId: () =>
+                set({
+                    selectedAddressId: null,
+                }),
 
-            setShipDetails: (details) => set({ shipDetails: details }),
-            clearShippingMethod: () => set({ shippingMethod: null }),
+            setAddressDetails: (details) =>
+                set({
+                    addressDetails: details,
+                }),
 
-            setShippingMethod: (method) => set({ shippingMethod: method }),
-
-            setPaymentMethod: (method) => set({ paymentMethod: method }),
+            setAllAddresses: (addresses) =>
+                set({
+                    allAddresses: addresses,
+                }),
 
             removeAddress: (id) =>
                 set((state) => ({
@@ -60,15 +90,79 @@ export const useCheckoutStore = create<CheckoutStore>()(
                         (address) => address.id !== Number(id)
                     ),
                 })),
+
+            // Shipping Actions
+            setSelectedDeliveryOptionId: (id) =>
+                set({
+                    selectedDeliveryOptionId: id,
+                }),
+
+            clearSelectedDeliveryOptionId: () =>
+                set({
+                    selectedDeliveryOptionId: null,
+                }),
+
+            setShipDetails: (details) =>
+                set({
+                    shipDetails: details,
+                }),
+
+            setShippingMethod: (method) =>
+                set({
+                    shippingMethod: method,
+                }),
+
+            clearShippingMethod: () =>
+                set({
+                    shippingMethod: null,
+                }),
+
+            setDeliveryDate: (date) =>
+                set({
+                    deliveryDate: date,
+                }),
+
+            clearDeliveryDate: () =>
+                set({
+                    deliveryDate: null,
+                }),
+
+            // Payment
+            setPaymentMethod: (method) =>
+                set({
+                    paymentMethod: method,
+                }),
+
+            // Reset Entire Checkout
+            clearCheckout: () =>
+                set({
+                    selectedAddressId: null,
+                    addressDetails: {},
+                    allAddresses: [],
+
+                    selectedDeliveryOptionId: null,
+                    shipDetails: {},
+                    shippingMethod: null,
+                    deliveryDate: null,
+
+                    paymentMethod: "credit_card",
+                }),
         }),
         {
-            name: "checkout-storage", // localStorage key
+            name: "checkout-storage",
+
             partialize: (state) => ({
                 selectedAddressId: state.selectedAddressId,
                 addressDetails: state.addressDetails,
                 allAddresses: state.allAddresses,
+
+                selectedDeliveryOptionId:
+                    state.selectedDeliveryOptionId,
+
                 shipDetails: state.shipDetails,
                 shippingMethod: state.shippingMethod,
+                deliveryDate: state.deliveryDate,
+
                 paymentMethod: state.paymentMethod,
             }),
         }
